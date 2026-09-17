@@ -6,6 +6,17 @@ animation work. It's a Next.js 16 (App Router, TypeScript) project, and
 we've structured it so the three of us can work on separate pages in
 parallel with minimal merge conflicts.
 
+## Tech stack
+
+| Layer | Choice |
+| --- | --- |
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS |
+| Forms | Resend + Zod (contact form → server action → email to studio inbox) |
+| Hosting | Vercel |
+| Package manager | pnpm |
+
 ## Running locally
 
 ```bash
