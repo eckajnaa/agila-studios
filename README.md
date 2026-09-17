@@ -2,7 +2,7 @@
 
 Agila Studios is the marketing website for a Minecraft content studio,
 covering builds, 3D modeling, development, video editing, scripting, and
-animation work. This repo is a Next.js 14+ (App Router, TypeScript)
+animation work. This repo is a Next.js 16 (App Router, TypeScript)
 project built to support three developers working on separate pages in
 parallel with minimal merge conflicts.
 
