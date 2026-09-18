@@ -49,12 +49,12 @@ export default function PortfolioFooter() {
             />
             <p className={`mt-1 max-w-xs text-sm font-bold text-orange-100 ${outfit.className}`}>
               Every creation starts with a{" "}
-              <span className="text-orange-400">single cube</span>.
+              <span className="text-[#F7AC00]">single cube.</span>
             </p>
           </div>
 
           <div>
-            <p className={`text-3xl uppercase tracking-[0.15em] text-orange-400 ${vt323.className}`}>
+            <p className={`text-3xl uppercase tracking-[0.15em] text-[#F7AC00] ${vt323.className}`}>
               Sitemap
             </p>
             <ul className="mt-4 flex flex-col gap-3">
@@ -72,7 +72,7 @@ export default function PortfolioFooter() {
           </div>
 
           <div>
-            <p className={`text-3xl uppercase tracking-[0.15em] text-orange-400 ${vt323.className}`}>
+            <p className={`text-3xl uppercase tracking-[0.15em] text-[#F7AC00] ${vt323.className}`}>
               Contact
             </p>
             <ul className="mt-2 flex gap-1">
@@ -93,16 +93,17 @@ export default function PortfolioFooter() {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-orange-100/10 pt-6 sm:flex-row">
-          <p className={`text-sm font-normal text-orange-400/90 ${outfit.className}`}>
+        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t-2 border-[#5A2E0C] pt-3 sm:flex-row">
+          <p className={`text-sm font-normal tracking-wide text-[#F08100] ${outfit.className}`}>
             &copy; {year} {SITE_NAME}. All rights reserved.
           </p>
           <button
             type="button"
             onClick={scrollToTop}
-            className="text-xs font-bold uppercase tracking-widest text-orange-400 transition-colors hover:text-orange-300"
+            className={`inline-flex items-center gap-1.5 text-lg uppercase tracking-widest text-[#F08100] transition-colors hover:text-orange-300 ${vt323.className}`}
           >
-            Back to top &uarr;
+            Back to top
+            <Image src="/ArrowUp.png" alt="" width={32} height={32} className="h-8 w-8" />
           </button>
         </div>
       </div>
