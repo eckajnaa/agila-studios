@@ -53,7 +53,7 @@ export default function PortfolioNavbar() {
             href={DISCORD_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className={`rounded-full bg-orange-500 px-5 py-2 text-base font-bold text-[#2B1608] transition-colors hover:bg-orange-400 ${outfit.className}`}
+            className={`inline-flex items-center justify-center rounded-[0.4375rem] bg-orange-500 px-7 py-3 text-xs font-bold text-[#2B1608] shadow-[0_0.375rem_0_0_#BF500D] transition-colors hover:bg-orange-400 ${outfit.className}`}
           >
             Join Discord
           </a>
