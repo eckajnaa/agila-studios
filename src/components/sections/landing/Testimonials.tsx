@@ -61,7 +61,7 @@ export default function Testimonials() {
               transition={{ duration: 0.4, ease: "backOut", delay: i * 0.12 + 0.2 }}
               aria-hidden="true"
             >
-              "
+              &quot;
             </motion.span>
 
             <p className="flex-1 text-xl leading-relaxed text-[#2a1a0e]/80" style={{ fontFamily: "var(--font-body)" }}>
