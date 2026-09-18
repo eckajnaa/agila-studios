@@ -77,13 +77,13 @@ export default function PortfolioFooter() {
         <div className="flex flex-col gap-10 sm:flex-row sm:justify-between">
           <div>
             <Image
-              src="/Logo.svg"
+              src="/LogoLight.png"
               alt={SITE_NAME}
-              width={165}
-              height={73}
-              className="h-10 w-auto"
+              width={152}
+              height={68}
+              className="h-16 w-auto"
             />
-            <p className="mt-4 max-w-xs text-sm font-medium text-orange-100">
+            <p className="mt-1 max-w-xs text-sm font-medium text-orange-100">
               Every creation starts with a{" "}
               <span className="text-orange-400">single cube</span>.
             </p>
