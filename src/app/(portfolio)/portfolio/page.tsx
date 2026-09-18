@@ -2,12 +2,8 @@
 // Compose section components from @/components/sections/portfolio here:
 // Hero, CategoryTabs, BuildsGrid.
 
+import Hero from "@/components/sections/portfolio/Hero";
+
 export default function PortfolioPage() {
-  return (
-    <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
-      <h1 className="text-3xl font-bold text-orange-100">
-        Portfolio Page — WIP
-      </h1>
-    </div>
-  );
+  return <Hero />;
 }
