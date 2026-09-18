@@ -20,7 +20,7 @@ export default function PortfolioNavbar() {
   return (
     <header className="sticky top-0 z-50 bg-[#2B1608] shadow-[0_15px_0_0_#F08100]">
       <nav
-        className={`mx-auto flex h-20 max-w-6xl items-center justify-between px-4 sm:px-6 ${vt323.className}`}
+        className={`flex h-20 w-full items-center justify-between px-6 sm:px-10 lg:px-16 ${vt323.className}`}
       >
         <Link href="/" className="flex items-center">
           <Image
@@ -28,7 +28,7 @@ export default function PortfolioNavbar() {
             alt="Agila Studios"
             width={152}
             height={68}
-            className="h-12 w-auto"
+            className="h-16 w-auto"
             priority
           />
         </Link>
@@ -39,8 +39,8 @@ export default function PortfolioNavbar() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className={`text-base transition-colors hover:text-orange-300 ${
-                    index === 0 ? "text-orange-400" : "text-orange-100/90"
+                  className={`text-lg transition-colors hover:text-orange-300 ${
+                    index === 0 ? "text-[#F7AC00]" : "text-orange-100/90"
                   }`}
                 >
                   {link.label}
