@@ -1,6 +1,7 @@
 export interface CategoryImage {
   src: string;
   alt: string;
+  youtubeId?: string;
 }
 
 function range(count: number, makeItem: (n: number) => CategoryImage): CategoryImage[] {
@@ -26,5 +27,7 @@ export const CATEGORY_IMAGES: Record<string, CategoryImage[]> = {
     src: `/portfolio/scripts/scripts-img${n}.png`,
     alt: `Script ${n}`,
   })),
-  Animation: [{ src: "/portfolio/animation/animation-img1.jpg", alt: "Animation 1" }],
+  Animation: [
+    { src: "/portfolio/animation/animation-img1.jpg", alt: "Animation 1", youtubeId: "d-k9yQZT-dk" },
+  ],
 };
