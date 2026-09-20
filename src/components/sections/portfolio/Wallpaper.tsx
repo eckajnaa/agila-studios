@@ -1,10 +1,15 @@
 "use client";
 
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { Flip } from "gsap/Flip";
 import { VT323 } from "next/font/google";
 import Image from "next/image";
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode, type Ref } from "react";
 
 const vt323 = VT323({ weight: "400", subsets: ["latin"] });
+
+gsap.registerPlugin(useGSAP, Flip);
 
 interface WallpaperProps {
   src: string;
@@ -56,6 +61,56 @@ export default function Wallpaper({
   externalUrl,
 }: WallpaperProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [shouldRender, setShouldRender] = useState(false);
+  const cardRef = useRef<HTMLElement>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
+  const frameRef = useRef<HTMLDivElement>(null);
+  const flipStateRef = useRef<Flip.FlipState | null>(null);
+
+  function openModal() {
+    if (cardRef.current) {
+      flipStateRef.current = Flip.getState(cardRef.current);
+    }
+    setShouldRender(true);
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  useGSAP(
+    () => {
+      if (!shouldRender || !backdropRef.current || !frameRef.current) return;
+
+      if (isOpen) {
+        gsap.fromTo(backdropRef.current, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" });
+
+        if (flipStateRef.current) {
+          Flip.from(flipStateRef.current, {
+            targets: frameRef.current,
+            scale: true,
+            duration: 0.5,
+            ease: "power3.inOut",
+          });
+        }
+      } else {
+        gsap.to(backdropRef.current, { opacity: 0, duration: 0.35, ease: "power2.in" });
+
+        if (cardRef.current) {
+          Flip.fit(frameRef.current, cardRef.current, {
+            scale: true,
+            duration: 0.4,
+            ease: "power3.inOut",
+            onComplete: () => setShouldRender(false),
+          });
+        } else {
+          setShouldRender(false);
+        }
+      }
+    },
+    { dependencies: [isOpen, shouldRender] },
+  );
 
   const thumbnailMedia = <Image src={src} alt={alt} fill className="object-cover" />;
   let expandedMedia = thumbnailMedia;
@@ -88,28 +143,41 @@ export default function Wallpaper({
   return (
     <>
       {externalUrl ? (
-        <a href={externalUrl} target="_blank" rel="noopener noreferrer" className={cardClassName}>
+        <a
+          ref={cardRef as Ref<HTMLAnchorElement>}
+          href={externalUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={cardClassName}
+        >
           {cardInner}
         </a>
       ) : (
-        <button type="button" onClick={() => setIsOpen(true)} className={cardClassName}>
+        <button
+          ref={cardRef as Ref<HTMLButtonElement>}
+          type="button"
+          onClick={openModal}
+          className={cardClassName}
+        >
           {cardInner}
         </button>
       )}
 
-      {isOpen && (
+      {shouldRender && (
         <div
+          ref={backdropRef}
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-6"
-          onClick={() => setIsOpen(false)}
+          onClick={closeModal}
         >
           <div
+            ref={frameRef}
             className="relative aspect-[638/443] w-full max-w-4xl"
             onClick={(event) => event.stopPropagation()}
           >
             <FrameArt title={title} media={expandedMedia} />
             <button
               type="button"
-              onClick={() => setIsOpen(false)}
+              onClick={closeModal}
               aria-label="Close"
               className="absolute -top-10 right-0 text-2xl text-white transition-colors hover:text-orange-300"
             >
