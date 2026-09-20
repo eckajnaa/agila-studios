@@ -1,11 +1,42 @@
+"use client";
+
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { SplitText } from "gsap/SplitText";
 import { Outfit, Silkscreen } from "next/font/google";
+import { useRef } from "react";
 
 const silkscreen = Silkscreen({ weight: "400", subsets: ["latin"] });
 const outfit = Outfit({ weight: "400", subsets: ["latin"] });
 
+gsap.registerPlugin(useGSAP, SplitText);
+
 export default function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const subtitleRef = useRef<HTMLParagraphElement>(null);
+
+  useGSAP(() => {
+    if (!sectionRef.current || !headingRef.current || !subtitleRef.current) return;
+
+    const split = new SplitText(headingRef.current, { type: "chars" });
+
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+    tl.from(split.chars, { opacity: 0, y: 40, duration: 0.6, stagger: 0.04 })
+      .from(subtitleRef.current, { opacity: 0, y: 20, duration: 0.5 }, "-=0.25")
+      .fromTo(
+        sectionRef.current,
+        { borderBottomWidth: 0 },
+        { borderBottomWidth: 10, duration: 0.5, ease: "power2.out" },
+        "-=0.3",
+      );
+
+    return () => split.revert();
+  });
+
   return (
     <section
+      ref={sectionRef}
       className="relative flex min-h-[70vh] items-center overflow-hidden border-b-10 border-[#3E1F0A] bg-[#2B1608] py-24"
       style={{
         backgroundImage:
@@ -15,11 +46,13 @@ export default function Hero() {
     >
       <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center px-4 text-center sm:px-6">
         <h1
+          ref={headingRef}
           className={`text-7xl text-[#FFB300] [text-shadow:3px_3px_0_#000] sm:text-8xl ${silkscreen.className}`}
         >
           Agila Studios
         </h1>
         <p
+          ref={subtitleRef}
           className={`mt-10 max-w-none text-2xl text-[#FFF7E0] sm:text-3xl 2xl:whitespace-nowrap ${outfit.className}`}
         >
           Each creation is crafted with precision, creativity, and passion for
