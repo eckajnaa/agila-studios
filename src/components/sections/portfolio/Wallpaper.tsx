@@ -20,11 +20,11 @@ interface WallpaperProps {
   externalUrl?: string;
 }
 
-// The frame's inner "photo" cutout, measured from Wallpaper.png (638x443):
-// top 16.25%, right 7.05%, bottom 11.74%, left 5.02% of the frame's own box.
+// The frame's inner "photo" cutout, measured from Wallpaper.png (603x414):
+// top 16.91%, right 5.14%, bottom 8.94%, left 5.14% of the frame's own box.
 // Insets are shrunk slightly beyond the measured cutout so the photo tucks
 // under the frame's border, hiding any sub-pixel rounding gap.
-const PHOTO_INSET = "15% 6% 10.5% 4.2%";
+const PHOTO_INSET = "15.6% 4% 7.5% 4.2%";
 
 const TITLE_PLATE_SHADOW =
   "4px 4px 4px 0 rgba(0,0,0,0.35), inset -2px -2px 2px 0 rgba(0,0,0,0.5), inset 2px 2px 2px 0 rgba(255,255,255,0.4)";
@@ -63,9 +63,32 @@ export default function Wallpaper({
   const [isOpen, setIsOpen] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
   const cardRef = useRef<HTMLElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const flipStateRef = useRef<Flip.FlipState | null>(null);
+
+  function handleHoverEnter() {
+    gsap.to(innerRef.current, {
+      y: -6,
+      scale: 1.03,
+      rotate: -1.5,
+      boxShadow: "0px 18px 28px rgba(0,0,0,0.45)",
+      duration: 0.3,
+      ease: "power2.out",
+    });
+  }
+
+  function handleHoverLeave() {
+    gsap.to(innerRef.current, {
+      y: 0,
+      scale: 1,
+      rotate: 0,
+      boxShadow: "0px 0px 0px rgba(0,0,0,0)",
+      duration: 0.3,
+      ease: "power2.out",
+    });
+  }
 
   function openModal() {
     if (cardRef.current) {
@@ -132,10 +155,15 @@ export default function Wallpaper({
     );
   }
 
-  const cardClassName =
-    "group relative block aspect-[638/443] w-full cursor-pointer text-left";
+  const cardClassName = "relative block aspect-[603/414] w-full cursor-pointer text-left";
   const cardInner = (
-    <div className="relative h-full w-full transition-transform duration-200 group-hover:scale-[1.02]">
+    <div
+      ref={innerRef}
+      onMouseEnter={handleHoverEnter}
+      onMouseLeave={handleHoverLeave}
+      className="relative h-full w-full"
+      style={{ boxShadow: "0px 0px 0px rgba(0,0,0,0)" }}
+    >
       <FrameArt title={title} media={thumbnailMedia} />
     </div>
   );
@@ -171,7 +199,7 @@ export default function Wallpaper({
         >
           <div
             ref={frameRef}
-            className="relative aspect-[638/443] w-full max-w-4xl"
+            className="relative aspect-[603/414] w-full max-w-4xl"
             onClick={(event) => event.stopPropagation()}
           >
             <FrameArt title={title} media={expandedMedia} />
