@@ -1,14 +1,18 @@
 "use client";
 
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import { Outfit, VT323 } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { DISCORD_URL } from "@/lib/constants";
 import { usePortfolioCategory } from "@/components/layout/PortfolioCategoryContext";
 
 const vt323 = VT323({ weight: "400", subsets: ["latin"] });
 const outfit = Outfit({ weight: "700", subsets: ["latin"] });
+
+gsap.registerPlugin(useGSAP);
 
 // Category links match the CategoryTabs sections on the portfolio page.
 const PORTFOLIO_NAV_LINKS = [
@@ -23,6 +27,35 @@ const PORTFOLIO_NAV_LINKS = [
 export default function PortfolioNavbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { activeCategory, setActiveCategory } = usePortfolioCategory();
+  const mobileListRef = useRef<HTMLUListElement>(null);
+
+  // Stagger the mobile menu links in each time the panel opens.
+  useGSAP(
+    () => {
+      if (!menuOpen || !mobileListRef.current) return;
+      const items = gsap.utils.toArray<HTMLElement>(mobileListRef.current.children);
+      gsap.fromTo(
+        items,
+        { opacity: 0, x: -16 },
+        { opacity: 1, x: 0, duration: 0.35, ease: "power2.out", stagger: 0.06 },
+      );
+    },
+    { dependencies: [menuOpen] },
+  );
+
+  // Quick scale-pop on whichever nav link just became active (desktop + mobile).
+  useGSAP(
+    () => {
+      const targets = document.querySelectorAll(`[data-nav-link="${activeCategory}"]`);
+      if (targets.length === 0) return;
+      gsap.fromTo(
+        targets,
+        { scale: 0.85 },
+        { scale: 1, duration: 0.4, ease: "back.out(3)" },
+      );
+    },
+    { dependencies: [activeCategory] },
+  );
 
   return (
     <header className="sticky top-0 z-50 bg-[#2B1608] shadow-[0_15px_0_0_#F08100]">
@@ -46,8 +79,9 @@ export default function PortfolioNavbar() {
               <li key={link.href}>
                 <Link
                   href={link.href}
+                  data-nav-link={link.label}
                   onClick={() => setActiveCategory(link.label)}
-                  className={`text-lg transition-colors hover:text-orange-300 ${
+                  className={`inline-block text-lg transition-colors hover:text-orange-300 ${
                     activeCategory === link.label ? "text-[#F7AC00]" : "text-orange-100/90"
                   }`}
                 >
@@ -97,16 +131,17 @@ export default function PortfolioNavbar() {
           menuOpen ? "max-h-96" : "max-h-0"
         }`}
       >
-        <ul className="flex flex-col gap-4 px-6 py-6 sm:px-10">
+        <ul ref={mobileListRef} className="flex flex-col gap-4 px-6 py-6 sm:px-10">
           {PORTFOLIO_NAV_LINKS.map((link) => (
             <li key={link.href}>
               <Link
                 href={link.href}
+                data-nav-link={link.label}
                 onClick={() => {
                   setActiveCategory(link.label);
                   setMenuOpen(false);
                 }}
-                className={`text-lg transition-colors hover:text-orange-300 ${
+                className={`inline-block text-lg transition-colors hover:text-orange-300 ${
                   activeCategory === link.label ? "text-[#F7AC00]" : "text-orange-100/90"
                 }`}
               >
