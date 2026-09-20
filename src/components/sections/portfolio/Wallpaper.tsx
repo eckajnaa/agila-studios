@@ -37,6 +37,7 @@ function FrameArt({ title, media }: { title: string; media: ReactNode }) {
         alt=""
         fill
         aria-hidden="true"
+        sizes="(max-width: 768px) 90vw, (max-width: 1280px) 45vw, 550px"
         className="pointer-events-none object-contain"
       />
       <div className="absolute overflow-hidden border-2 border-black" style={{ inset: PHOTO_INSET }}>
@@ -135,7 +136,15 @@ export default function Wallpaper({
     { dependencies: [isOpen, shouldRender] },
   );
 
-  const thumbnailMedia = <Image src={src} alt={alt} fill className="object-cover" />;
+  const thumbnailMedia = (
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      sizes="(max-width: 768px) 90vw, (max-width: 1280px) 45vw, 550px"
+      className="object-cover"
+    />
+  );
   let expandedMedia = thumbnailMedia;
   if (youtubeId) {
     expandedMedia = (
