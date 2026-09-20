@@ -3,6 +3,7 @@
 // Hero, CategoryTabs, BuildsGrid.
 
 import Hero from "@/components/sections/portfolio/Hero";
+import CategoryHeading from "@/components/sections/portfolio/CategoryHeading";
 
 export default function PortfolioPage() {
   return (
@@ -15,6 +16,9 @@ export default function PortfolioPage() {
           backgroundSize: "28px 100%",
         }}
       >
+        <div className="mx-auto max-w-6xl px-4 py-10 text-center sm:px-6">
+          <CategoryHeading />
+        </div>
         {/* CategoryTabs, BuildsGrid go here */}
       </div>
     </>

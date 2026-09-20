@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { DISCORD_URL } from "@/lib/constants";
+import { usePortfolioCategory } from "@/components/layout/PortfolioCategoryContext";
 
 const vt323 = VT323({ weight: "400", subsets: ["latin"] });
 const outfit = Outfit({ weight: "700", subsets: ["latin"] });
@@ -21,6 +22,7 @@ const PORTFOLIO_NAV_LINKS = [
 
 export default function PortfolioNavbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { activeCategory, setActiveCategory } = usePortfolioCategory();
 
   return (
     <header className="sticky top-0 z-50 bg-[#2B1608] shadow-[0_15px_0_0_#F08100]">
@@ -40,12 +42,13 @@ export default function PortfolioNavbar() {
 
         <div className="flex items-center gap-6">
           <ul className="hidden items-center gap-6 xl:flex">
-            {PORTFOLIO_NAV_LINKS.map((link, index) => (
+            {PORTFOLIO_NAV_LINKS.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
+                  onClick={() => setActiveCategory(link.label)}
                   className={`text-lg transition-colors hover:text-orange-300 ${
-                    index === 0 ? "text-[#F7AC00]" : "text-orange-100/90"
+                    activeCategory === link.label ? "text-[#F7AC00]" : "text-orange-100/90"
                   }`}
                 >
                   {link.label}
@@ -95,13 +98,16 @@ export default function PortfolioNavbar() {
         }`}
       >
         <ul className="flex flex-col gap-4 px-6 py-6 sm:px-10">
-          {PORTFOLIO_NAV_LINKS.map((link, index) => (
+          {PORTFOLIO_NAV_LINKS.map((link) => (
             <li key={link.href}>
               <Link
                 href={link.href}
-                onClick={() => setMenuOpen(false)}
+                onClick={() => {
+                  setActiveCategory(link.label);
+                  setMenuOpen(false);
+                }}
                 className={`text-lg transition-colors hover:text-orange-300 ${
-                  index === 0 ? "text-[#F7AC00]" : "text-orange-100/90"
+                  activeCategory === link.label ? "text-[#F7AC00]" : "text-orange-100/90"
                 }`}
               >
                 {link.label}
