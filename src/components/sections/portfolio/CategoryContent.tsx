@@ -17,6 +17,7 @@ export default function CategoryContent() {
   const { activeCategory } = usePortfolioCategory();
   const [displayCategory, setDisplayCategory] = useState(activeCategory);
   const containerRef = useRef<HTMLDivElement>(null);
+  const wipRef = useRef<HTMLParagraphElement>(null);
 
   // Fade the current grid out, then swap in the new category's content.
   useGSAP(
@@ -63,11 +64,27 @@ export default function CategoryContent() {
     { dependencies: [displayCategory], revertOnUpdate: true },
   );
 
+  // Slow looping pulse on the "WIP" placeholder, like a blinking construction sign.
+  useGSAP(
+    () => {
+      if (!wipRef.current) return;
+      gsap.to(wipRef.current, {
+        opacity: 0.4,
+        duration: 0.8,
+        ease: "sine.inOut",
+        repeat: -1,
+        yoyo: true,
+      });
+    },
+    { dependencies: [displayCategory], revertOnUpdate: true },
+  );
+
   const images = CATEGORY_IMAGES[displayCategory] ?? [];
 
   if (images.length === 0) {
     return (
       <p
+        ref={wipRef}
         className={`px-4 py-24 text-center text-4xl text-[#FFB300] [text-shadow:3px_3px_0_#000] sm:text-5xl ${silkscreen.className}`}
       >
         WIP
