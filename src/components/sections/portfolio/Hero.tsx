@@ -2,6 +2,7 @@
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { Outfit, Silkscreen } from "next/font/google";
 import { useRef } from "react";
@@ -9,7 +10,7 @@ import { useRef } from "react";
 const silkscreen = Silkscreen({ weight: "400", subsets: ["latin"] });
 const outfit = Outfit({ weight: "400", subsets: ["latin"] });
 
-gsap.registerPlugin(useGSAP, SplitText);
+gsap.registerPlugin(useGSAP, SplitText, ScrollTrigger);
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -33,6 +34,24 @@ export default function Hero() {
 
     return () => split.revert();
   });
+
+  // Subtle parallax drift on the grid background as the hero scrolls past.
+  useGSAP(
+    () => {
+      if (!sectionRef.current) return;
+      gsap.to(sectionRef.current, {
+        backgroundPosition: "0px 120px",
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+    },
+    { scope: sectionRef },
+  );
 
   return (
     <section
