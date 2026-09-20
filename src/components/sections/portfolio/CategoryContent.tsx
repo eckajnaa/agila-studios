@@ -60,6 +60,13 @@ export default function CategoryContent() {
         onEnter: (batch) =>
           gsap.to(batch, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.1 }),
       });
+
+      // The grid's height changes with each category (e.g. 10 images vs 1),
+      // which shifts where every other trigger on the page (like the
+      // footer's reveal) actually falls. Without this, a trigger whose
+      // point was never reached under a taller category can become
+      // permanently unreachable once the page shrinks.
+      ScrollTrigger.refresh();
     },
     { dependencies: [displayCategory], revertOnUpdate: true },
   );
