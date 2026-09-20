@@ -11,6 +11,7 @@ export default function PortfolioPage() {
     <>
       <Hero />
       <div
+        id="portfolio-content"
         className="border-b-10 border-[#3E1F0A]/60 bg-[#5A2E0C]"
         style={{
           backgroundImage: "linear-gradient(to right, #2B1608 2px, transparent 2px)",
