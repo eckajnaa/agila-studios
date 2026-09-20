@@ -2,6 +2,7 @@
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Silkscreen } from "next/font/google";
 import { useRef, useState } from "react";
 import { usePortfolioCategory } from "@/components/layout/PortfolioCategoryContext";
@@ -10,7 +11,7 @@ import Wallpaper from "./Wallpaper";
 
 const silkscreen = Silkscreen({ weight: "400", subsets: ["latin"] });
 
-gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 export default function CategoryContent() {
   const { activeCategory } = usePortfolioCategory();
@@ -43,18 +44,23 @@ export default function CategoryContent() {
     { dependencies: [activeCategory] },
   );
 
-  // Stagger the new grid in once it has rendered.
+  // Reveal each wallpaper as it scrolls into view. Items already above the
+  // fold when the grid mounts (e.g. right after a category switch) reveal
+  // immediately since they already satisfy the scroll trigger.
   useGSAP(
     () => {
       if (!containerRef.current) return;
       const items = gsap.utils.toArray<HTMLElement>(containerRef.current.children);
-      gsap.fromTo(
-        items,
-        { opacity: 0, scale: 0.95, y: 20 },
-        { opacity: 1, scale: 1, y: 0, duration: 0.35, ease: "power2.out", stagger: 0.06 },
-      );
+      gsap.set(items, { opacity: 0, y: 30 });
+
+      ScrollTrigger.batch(items, {
+        start: "top 88%",
+        once: true,
+        onEnter: (batch) =>
+          gsap.to(batch, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.1 }),
+      });
     },
-    { dependencies: [displayCategory] },
+    { dependencies: [displayCategory], revertOnUpdate: true },
   );
 
   const images = CATEGORY_IMAGES[displayCategory] ?? [];
