@@ -4,13 +4,14 @@
 
 import PortfolioNavbar from "@/components/layout/PortfolioNavbar";
 import PortfolioFooter from "@/components/layout/PortfolioFooter";
+import { PortfolioCategoryProvider } from "@/components/layout/PortfolioCategoryContext";
 
 export default function PortfolioLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <PortfolioCategoryProvider>
       <PortfolioNavbar />
       <main className="flex-1">{children}</main>
       <PortfolioFooter />
-    </>
+    </PortfolioCategoryProvider>
   );
 }
