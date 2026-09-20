@@ -1,12 +1,19 @@
 "use client";
 
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Outfit, VT323 } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
+import { useRef } from "react";
 import { DISCORD_URL, SITE_NAME } from "@/lib/constants";
 
 const outfit = Outfit({ weight: ["400", "700"], subsets: ["latin"] });
 const vt323 = VT323({ weight: "400", subsets: ["latin"] });
+
+gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin);
 
 const PORTFOLIO_SITEMAP_LINKS = [
   { label: "About", href: "/about" },
@@ -22,15 +29,51 @@ const SOCIAL_ICON_LINKS = [
   { label: "Discord", href: DISCORD_URL, src: "/Discord.png" },
 ];
 
+function handleIconHoverEnter(event: React.MouseEvent<HTMLElement>) {
+  gsap.to(event.currentTarget, { scale: 1.2, y: -3, duration: 0.25, ease: "back.out(2)" });
+}
+
+function handleIconHoverLeave(event: React.MouseEvent<HTMLElement>) {
+  gsap.to(event.currentTarget, { scale: 1, y: 0, duration: 0.25, ease: "power2.out" });
+}
+
+function handleArrowHoverEnter(event: React.MouseEvent<HTMLElement>) {
+  gsap.to(event.currentTarget, { y: -4, duration: 0.3, ease: "power2.out" });
+}
+
+function handleArrowHoverLeave(event: React.MouseEvent<HTMLElement>) {
+  gsap.to(event.currentTarget, { y: 0, duration: 0.3, ease: "power2.out" });
+}
+
 export default function PortfolioFooter() {
   const year = new Date().getFullYear();
+  const footerRef = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      if (!footerRef.current) return;
+      gsap.from(footerRef.current, {
+        opacity: 0,
+        y: 40,
+        duration: 0.6,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: footerRef.current,
+          start: "top 90%",
+          once: true,
+        },
+      });
+    },
+    { scope: footerRef },
+  );
 
   function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    gsap.to(window, { duration: 1, scrollTo: 0, ease: "power2.inOut" });
   }
 
   return (
     <footer
+      ref={footerRef}
       className="text-orange-100"
       style={{
         background:
@@ -83,7 +126,9 @@ export default function PortfolioFooter() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={label}
-                    className="flex h-9 w-9 items-center justify-center transition-opacity hover:opacity-80"
+                    onMouseEnter={handleIconHoverEnter}
+                    onMouseLeave={handleIconHoverLeave}
+                    className="flex h-9 w-9 items-center justify-center"
                   >
                     <Image src={src} alt={label} width={28} height={28} className="h-7 w-7" />
                   </a>
@@ -103,7 +148,15 @@ export default function PortfolioFooter() {
             className={`inline-flex items-center gap-1.5 text-lg uppercase tracking-widest text-[#F08100] transition-colors hover:text-orange-300 ${vt323.className}`}
           >
             Back to top
-            <Image src="/ArrowUp.png" alt="" width={32} height={32} className="h-8 w-8" />
+            <Image
+              src="/ArrowUp.png"
+              alt=""
+              width={32}
+              height={32}
+              className="h-8 w-8"
+              onMouseEnter={handleArrowHoverEnter}
+              onMouseLeave={handleArrowHoverLeave}
+            />
           </button>
         </div>
       </div>
