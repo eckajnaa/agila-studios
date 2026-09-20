@@ -145,7 +145,7 @@ export default function PortfolioFooter() {
           <button
             type="button"
             onClick={scrollToTop}
-            className={`inline-flex items-center gap-1.5 text-lg uppercase tracking-widest text-[#F08100] transition-colors hover:text-orange-300 ${vt323.className}`}
+            className={`inline-flex cursor-pointer items-center gap-1.5 text-lg uppercase tracking-widest text-[#F08100] transition-colors hover:text-orange-300 ${vt323.className}`}
           >
             Back to top
             <Image
