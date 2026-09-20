@@ -24,7 +24,14 @@ export default function CategoryContent() {
   return (
     <div className="mx-auto grid max-w-[88rem] grid-cols-1 gap-10 px-4 pb-16 sm:px-6 md:grid-cols-2">
       {images.map((item) => (
-        <Wallpaper key={item.src} src={item.src} alt={item.alt} youtubeId={item.youtubeId} />
+        <Wallpaper
+          key={item.src}
+          src={item.src}
+          alt={item.alt}
+          youtubeId={item.youtubeId}
+          videoSrc={item.videoSrc}
+          externalUrl={item.externalUrl}
+        />
       ))}
     </div>
   );

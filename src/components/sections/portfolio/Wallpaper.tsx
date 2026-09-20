@@ -11,6 +11,8 @@ interface WallpaperProps {
   alt: string;
   title?: string;
   youtubeId?: string;
+  videoSrc?: string;
+  externalUrl?: string;
 }
 
 // The frame's inner "photo" cutout, measured from Wallpaper.png (638x443):
@@ -35,7 +37,7 @@ function FrameArt({ title, media }: { title: string; media: ReactNode }) {
       <div className="absolute overflow-hidden border-2 border-black" style={{ inset: PHOTO_INSET }}>
         {media}
         <div
-          className="absolute bottom-[8%] left-[6%] max-w-[70%] truncate rounded-sm border border-black px-3 py-1.5"
+          className="absolute bottom-[8%] left-[3%] max-w-[70%] truncate rounded-sm border border-black px-3 py-1.5"
           style={{ backgroundColor: "#A4521A", boxShadow: TITLE_PLATE_SHADOW }}
         >
           <span className={`text-base text-white sm:text-lg ${vt323.className}`}>{title}</span>
@@ -50,33 +52,50 @@ export default function Wallpaper({
   alt,
   title = "Placeholder Title",
   youtubeId,
+  videoSrc,
+  externalUrl,
 }: WallpaperProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const thumbnailMedia = <Image src={src} alt={alt} fill className="object-cover" />;
-  const expandedMedia = youtubeId ? (
-    <iframe
-      className="absolute inset-0 h-full w-full"
-      src={`https://www.youtube.com/embed/${youtubeId}`}
-      title={alt}
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
-    />
-  ) : (
-    thumbnailMedia
+  let expandedMedia = thumbnailMedia;
+  if (youtubeId) {
+    expandedMedia = (
+      <iframe
+        className="absolute inset-0 h-full w-full"
+        src={`https://www.youtube.com/embed/${youtubeId}`}
+        title={alt}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      />
+    );
+  } else if (videoSrc) {
+    expandedMedia = (
+      <video className="absolute inset-0 h-full w-full object-cover" controls autoPlay>
+        <source src={videoSrc} />
+      </video>
+    );
+  }
+
+  const cardClassName =
+    "group relative block aspect-[638/443] w-full cursor-pointer text-left";
+  const cardInner = (
+    <div className="relative h-full w-full transition-transform duration-200 group-hover:scale-[1.02]">
+      <FrameArt title={title} media={thumbnailMedia} />
+    </div>
   );
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setIsOpen(true)}
-        className="group relative aspect-[638/443] w-full cursor-pointer text-left"
-      >
-        <div className="relative h-full w-full transition-transform duration-200 group-hover:scale-[1.02]">
-          <FrameArt title={title} media={thumbnailMedia} />
-        </div>
-      </button>
+      {externalUrl ? (
+        <a href={externalUrl} target="_blank" rel="noopener noreferrer" className={cardClassName}>
+          {cardInner}
+        </a>
+      ) : (
+        <button type="button" onClick={() => setIsOpen(true)} className={cardClassName}>
+          {cardInner}
+        </button>
+      )}
 
       {isOpen && (
         <div
