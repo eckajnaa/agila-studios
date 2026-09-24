@@ -43,11 +43,8 @@ export default function Contact() {
             href={DISCORD_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block rounded-lg px-8 py-4 text-lg font-semibold text-[#2B1608] shadow-[0_6px_0px_#7a3200]"
-            style={{ backgroundColor: "#F08100", fontFamily: "var(--font-body, 'Outfit', sans-serif)" }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ duration: 0.15 }}
+            className="inline-flex translate-y-0 items-center justify-center rounded-[0.4375rem] bg-[#F08100] px-7 py-2 text-xl font-bold text-[#2B1608] shadow-[0_0.375rem_0_0_#A84400] transition-all duration-150 hover:translate-y-[0.375rem] hover:bg-orange-400 hover:shadow-[0_0_0_0_#BF500D]"
+            style={{ backgroundColor: "#ff8904", fontFamily: "var(--font-body, 'Outfit', sans-serif)" }}
           >
             Join Discord
           </motion.a>
@@ -67,14 +64,14 @@ export default function Contact() {
                 Subject
               </label>
               <input
-                id="subject"
-                name="subject"
-                type="text"
-                required
-                placeholder="e.g. Custom build for my SMP"
-                className="rounded border border-white/30 bg-white/30 px-4 py-2.5 text-base text-white placeholder:text-white/50 outline-none focus:border-white focus:bg-white/40"
-                style={{ fontFamily: "var(--font-body)" }}
-              />
+              id="subject"
+              name="subject"
+              type="text"
+              required
+              placeholder="e.g. Custom build for my SMP"
+              className="rounded border border-white/30 bg-white/30 px-4 py-2.5 text-base font-medium text-[#2B1608] placeholder:text-white/50 outline-none focus:border-white focus:bg-white/50"
+              style={{ fontFamily: "var(--font-body)" }}
+            />
             </div>
 
             <div className="flex flex-col gap-1.5">
@@ -87,7 +84,7 @@ export default function Contact() {
                 required
                 rows={5}
                 placeholder="Tell us about your project…"
-                className="rounded border border-white/30 bg-white/30 px-4 py-2.5 text-base text-white placeholder:text-white/50 outline-none focus:border-white focus:bg-white/40 resize-none"
+                className="rounded border border-white/30 bg-white/30 px-4 py-2.5 text-base font-medium text-[#2B1608] placeholder:text-white/50 outline-none focus:border-white focus:bg-white/50"
                 style={{ fontFamily: "var(--font-body)" }}
               />
             </div>
@@ -95,8 +92,7 @@ export default function Contact() {
             <div className="flex justify-end">
               <motion.button
                 type="submit"
-                className="flex items-center gap-2 rounded border border-white px-5 py-2.5 text-xl font-semibold text-white transition-colors hover:bg-white hover:text-[#c47000]"
-                style={{ fontFamily: "var(--font-body)" }}
+className="flex translate-y-0 items-center gap-2 rounded border border-white bg-transparent px-4 py-1 text-lg font-semibold text-white shadow-[0_4px_0px_rgba(255,255,255,0.4)] transition-all duration-150 hover:translate-y-[4px] hover:shadow-none cursor-pointer"                style={{ fontFamily: "var(--font-body)" }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >

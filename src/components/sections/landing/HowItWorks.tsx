@@ -24,7 +24,7 @@ export default function HowItWorks() {
         HOW IT WORKS
       </motion.h2>
 
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-20 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-20 sm:grid-cols-2 lg:grid-cols-4">
         {STEPS.map((step, i) => (
           <motion.div
             key={step.number}

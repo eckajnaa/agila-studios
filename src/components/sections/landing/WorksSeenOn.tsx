@@ -36,14 +36,14 @@ export default function WorksSeenOn() {
           {CREATORS.map((creator, i) => (
             <motion.div
               key={creator.name}
-              className="relative h-25 w-25 overflow-hidden"
+              className="relative h-25 w-25"
               initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
               whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
               viewport={{ once: false, amount: 0.4 }}
               transition={{ duration: 0.5, ease: "backOut", delay: i * 0.1 }}
               whileHover={{ scale: 1.15, rotate: 3, transition: { duration: 0.2 } }}
             >
-              <Image src={creator.image} alt={creator.name} fill unoptimized className="object-cover" />
+              <Image src={creator.image} alt={creator.name} fill unoptimized className="object-contain" />
             </motion.div>
           ))}
         </div>
