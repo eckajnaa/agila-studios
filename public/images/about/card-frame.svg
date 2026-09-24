@@ -1,0 +1,15 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="333" height="534" viewBox="0 0 333 534" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="element-0">
+<rect id="Rectangle 27" x="4" y="4" width="325" height="525" fill="#FFF6E5"/>
+<path id="Line 5" d="M8 2H322" stroke="#3E1F0A" stroke-width="4"/>
+<path id="Line 7" d="M2 523L2 7.99997" stroke="#3E1F0A" stroke-width="4"/>
+<path id="Line 8" d="M331 523L331 7.99997" stroke="#3E1F0A" stroke-width="4"/>
+<path id="Line 6" d="M10 532L327 532" stroke="#3E1F0A" stroke-width="4"/>
+<rect id="Rectangle 33" x="4" y="4" width="30" height="29" fill="#FFB300"/>
+<rect id="Rectangle 36" x="299" y="500" width="30" height="29" fill="#FFB300"/>
+<rect id="Rectangle 34" x="34" y="4" width="2" height="29" fill="black"/>
+<rect id="Rectangle 37" x="298" y="500" width="2" height="29" fill="black"/>
+<rect id="Rectangle 38" x="300" y="500" width="2" height="29" transform="rotate(-90 300 500)" fill="black"/>
+<rect id="Rectangle 35" x="4" y="35" width="2" height="31" transform="rotate(-90 4 35)" fill="black"/>
+</g>
+</svg>
