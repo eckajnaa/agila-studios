@@ -5,11 +5,12 @@ import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { VT323 } from "next/font/google";
+import { Silkscreen, VT323 } from "next/font/google";
 import ZigzagDivider from "./ZigzagDivider";
 import ZigzagDividerBottom from "./ZigzagDividerBottom";
 
 const vt323 = VT323({ weight: "400", subsets: ["latin"], display: "swap" });
+const silkscreen = Silkscreen({ weight: "700", subsets: ["latin"], display: "swap" });
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -255,16 +256,15 @@ export default function PortfolioCarousel() {
         {/* Header */}
         <div
           data-header
-          className="mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-4 px-6 pt-10 pb-6"
+          className="flex w-full flex-wrap items-end justify-between gap-4 px-10 pt-10 pb-6 sm:px-24 xl:px-44"
         >
           <div>
-            <p className="text-xl tracking-widest text-orange-400" style={{ fontFamily: "var(--font-pixel)" }}>
+            <p className="text-3xl tracking-[0.3em] text-orange-400" style={{ fontFamily: "var(--font-pixel)" }}>
               PORTFOLIO
             </p>
             <h2
               id="portfolio-heading"
-              className="text-5xl text-orange-100 tracking-wider font-semibold"
-              style={{ fontFamily: "var(--font-pixel)" }}
+              className={`${silkscreen.className} text-5xl text-orange-100 tracking-wider`}
             >
               OUR WORK
             </h2>
