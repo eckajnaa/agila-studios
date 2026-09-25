@@ -155,7 +155,7 @@ export default function LandingFooter() {
           <button
             type="button"
             onClick={scrollToTop}
-            className={`${vt323.className} flex items-center gap-1 text-xl text-white/70 transition-colors hover:text-white`}
+            className={`${vt323.className} flex cursor-pointer items-center gap-1 text-xl text-white/70 transition-colors hover:text-white`}
           >
             BACK TO TOP ↑
           </button>
