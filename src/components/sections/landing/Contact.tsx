@@ -104,101 +104,109 @@ export default function Contact() {
           viewport={{ once: false, amount: 0.3 }}
           transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
         >
-          {status === "success" ? (
-            <div role="status" className="flex flex-col items-center gap-4 py-10 text-center" style={{ fontFamily: "var(--font-body)" }}>
-              <p className="text-3xl text-white" style={{ fontFamily: "var(--font-pixel)" }}>
-                MESSAGE SENT!
-              </p>
-              <p className="max-w-xs text-lg text-white/80">
-                Thanks for reaching out — we&apos;ll get back to you by email soon.
-              </p>
-              <button
-                type="button"
-                onClick={() => setStatus("idle")}
-                className="mt-2 cursor-pointer text-base font-semibold text-white underline underline-offset-4 hover:text-orange-200"
-              >
-                Send another message
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5" style={{ fontFamily: "var(--font-body)" }}>
-              {/* Disabling the fieldset locks every input while the request is in flight */}
-              <fieldset disabled={status === "sending"} className="flex flex-col gap-5">
-                <div className="grid gap-5 sm:grid-cols-2">
+          {/* Success message and form share one grid cell: the form stays mounted (just hidden)
+              so the card keeps its height and the layout around it doesn't jump. */}
+          <div className="grid">
+            <form
+              onSubmit={handleSubmit}
+              aria-hidden={status === "success"}
+              className={`flex flex-col gap-5 [grid-area:1/1] ${status === "success" ? "invisible" : ""}`}
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+                {/* Disabling the fieldset locks every input while the request is in flight */}
+                <fieldset disabled={status === "sending"} className="flex flex-col gap-5">
+                  <div className="grid gap-5 sm:grid-cols-2">
+                    <div className="flex flex-col gap-1.5">
+                      <label htmlFor="name" className={LABEL_CLASS}>Name</label>
+                      <input
+                        id="name"
+                        name="name"
+                        type="text"
+                        autoComplete="name"
+                        required
+                        maxLength={CONTACT_LIMITS.name}
+                        placeholder="Your name"
+                        className={INPUT_CLASS}
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label htmlFor="email" className={LABEL_CLASS}>Email</label>
+                      <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        autoComplete="email"
+                        required
+                        maxLength={CONTACT_LIMITS.email}
+                        placeholder="you@example.com"
+                        className={INPUT_CLASS}
+                      />
+                    </div>
+                  </div>
+
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="name" className={LABEL_CLASS}>Name</label>
+                    <label htmlFor="subject" className={LABEL_CLASS}>Subject</label>
                     <input
-                      id="name"
-                      name="name"
+                      id="subject"
+                      name="subject"
                       type="text"
-                      autoComplete="name"
                       required
-                      maxLength={CONTACT_LIMITS.name}
-                      placeholder="Your name"
+                      maxLength={CONTACT_LIMITS.subject}
+                      placeholder="e.g. Custom build for my SMP"
                       className={INPUT_CLASS}
                     />
                   </div>
+
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="email" className={LABEL_CLASS}>Email</label>
-                    <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      autoComplete="email"
+                    <label htmlFor="message" className={LABEL_CLASS}>Message</label>
+                    <textarea
+                      id="message"
+                      name="message"
                       required
-                      maxLength={CONTACT_LIMITS.email}
-                      placeholder="you@example.com"
+                      rows={5}
+                      maxLength={CONTACT_LIMITS.message}
+                      placeholder="Tell us about your project…"
                       className={INPUT_CLASS}
                     />
                   </div>
-                </div>
+                </fieldset>
 
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="subject" className={LABEL_CLASS}>Subject</label>
-                  <input
-                    id="subject"
-                    name="subject"
-                    type="text"
-                    required
-                    maxLength={CONTACT_LIMITS.subject}
-                    placeholder="e.g. Custom build for my SMP"
-                    className={INPUT_CLASS}
-                  />
-                </div>
+                {status === "error" && (
+                  <p role="alert" className="rounded border border-red-300/60 bg-red-500/25 px-4 py-2.5 text-base font-medium text-white">
+                    {errorMessage}
+                  </p>
+                )}
 
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="message" className={LABEL_CLASS}>Message</label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    required
-                    rows={5}
-                    maxLength={CONTACT_LIMITS.message}
-                    placeholder="Tell us about your project…"
-                    className={INPUT_CLASS}
-                  />
+                <div className="flex justify-end">
+                  <motion.button
+                    type="submit"
+                    disabled={status === "sending"}
+                    className="flex translate-y-0 cursor-pointer items-center gap-2 rounded border border-white bg-transparent px-4 py-1 text-lg font-semibold text-white shadow-[0_4px_0px_rgba(255,255,255,0.4)] transition-all duration-150 hover:translate-y-[4px] hover:shadow-none disabled:cursor-wait disabled:opacity-70"
+                    whileHover={status === "sending" ? undefined : { scale: 1.05 }}
+                    whileTap={status === "sending" ? undefined : { scale: 0.95 }}
+                  >
+                    {status === "sending" ? "Sending…" : "Send →"}
+                  </motion.button>
                 </div>
-              </fieldset>
-
-              {status === "error" && (
-                <p role="alert" className="rounded border border-red-300/60 bg-red-500/25 px-4 py-2.5 text-base font-medium text-white">
-                  {errorMessage}
+              </form>
+            {status === "success" && (
+              <div role="status" className="flex flex-col items-center justify-center gap-4 text-center [grid-area:1/1]" style={{ fontFamily: "var(--font-body)" }}>
+                <p className="text-3xl text-white" style={{ fontFamily: "var(--font-pixel)" }}>
+                  MESSAGE SENT!
                 </p>
-              )}
-
-              <div className="flex justify-end">
-                <motion.button
-                  type="submit"
-                  disabled={status === "sending"}
-                  className="flex translate-y-0 cursor-pointer items-center gap-2 rounded border border-white bg-transparent px-4 py-1 text-lg font-semibold text-white shadow-[0_4px_0px_rgba(255,255,255,0.4)] transition-all duration-150 hover:translate-y-[4px] hover:shadow-none disabled:cursor-wait disabled:opacity-70"
-                  whileHover={status === "sending" ? undefined : { scale: 1.05 }}
-                  whileTap={status === "sending" ? undefined : { scale: 0.95 }}
+                <p className="max-w-xs text-lg text-white/80">
+                  Thanks for reaching out — we&apos;ll get back to you by email soon.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setStatus("idle")}
+                  className="mt-2 cursor-pointer text-base font-semibold text-white underline underline-offset-4 hover:text-orange-200"
                 >
-                  {status === "sending" ? "Sending…" : "Send →"}
-                </motion.button>
+                  Send another message
+                </button>
               </div>
-            </form>
-          )}
+            )}
+          </div>
         </motion.div>
       </div>
 
