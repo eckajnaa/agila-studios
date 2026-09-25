@@ -81,8 +81,7 @@ export default function Navbar({ showBottomBorder = false }: { showBottomBorder?
             href={DISCORD_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className={`inline-flex translate-y-0 items-center justify-center rounded-[0.4375rem] bg-[#F08100] px-5 py-2 text-base font-bold text-[#2B1608] shadow-[0_0.375rem_0_0_#BF500D] transition-all duration-150 hover:translate-y-[0.375rem] hover:bg-orange-400 hover:shadow-[0_0_0_0_#BF500D] ${outfit.className}`}
-          >
+            className={`inline-flex translate-y-0 items-center justify-center rounded-[0.4375rem] bg-[#F08100] font-bold text-[#2B1608] transition-all duration-150 hover:bg-orange-400 hover:shadow-none whitespace-nowrap text-sm px-3 py-1.5 shadow-[0_4px_0_0_#BF500D] hover:translate-y-[4px] sm:text-base sm:px-5 sm:py-2 sm:shadow-[0_0.375rem_0_0_#BF500D] sm:hover:translate-y-[0.375rem] ${outfit.className}`}          >
             Join Discord
           </a>
 

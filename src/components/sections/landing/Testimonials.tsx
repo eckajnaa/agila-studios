@@ -33,9 +33,9 @@ export default function Testimonials() {
         id="testimonials-heading"
         className="mb-12 tracking-wider text-center text-5xl text-[#2a1a0e] sm:text-6xl font-semibold"
         style={{ fontFamily: "var(--font-pixel)" }}
-        initial={{ opacity: 0, y: 24 }}
+        initial={{ opacity: 0.4, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, amount: 0.5 }}
+        viewport={{ once: true, amount: 0.5 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
         TESTIMONIALS
@@ -46,18 +46,18 @@ export default function Testimonials() {
           <motion.div
             key={t.id}
             className="flex flex-col gap-4 rounded-xl border-2 border-[#2B1608] bg-white px-6 py-7 text-left shadow-[0_6px_0px_#2B1608]"
-            initial={{ opacity: 0, scale: 0.9, y: 40 }}
+            initial={{ opacity: 0.4, scale: 0.95, y: 30 }}
             whileInView={{ opacity: 1, scale: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.12 }}
             whileHover={{ y: -6, transition: { duration: 0.2 } }}
           >
             <motion.span
               className="text-5xl leading-none text-orange-400"
               style={{ fontFamily: "var(--font-pixel)", display: "inline-block" }}
-              initial={{ opacity: 0, scale: 0.5 }}
+              initial={{ opacity: 0.4, scale: 0.7 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: false }}
+              viewport={{ once: true }}
               transition={{ duration: 0.4, ease: "backOut", delay: i * 0.12 + 0.2 }}
               aria-hidden="true"
             >

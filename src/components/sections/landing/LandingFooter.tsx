@@ -11,9 +11,9 @@ const vt323 = VT323({
 
 const SITEMAP = [
   { label: "About", href: "/about" },
-  { label: "Services", href: "/#services" },
+  { label: "Services", href: "#services" },
   { label: "Portfolio", href: "/portfolio" },
-  { label: "Faq", href: "/#faq" },
+  { label: "Faq", href: "#faq" },
 ];
 
 const SOCIALS = [
