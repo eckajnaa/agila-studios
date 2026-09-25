@@ -52,12 +52,12 @@ const SERVICES = [
 
 export default function Services() {
   return (
-    <section className="bg-[#FFF6E5] py-20 px-4" aria-labelledby="services-heading">
+    <section id="services" className="bg-[#FFF6E5] py-20 px-4 scroll-mt-20" aria-labelledby="services-heading">
       <motion.div
         className="mb-10 flex flex-col items-center gap-2 text-center"
-        initial={{ opacity: 0, y: 24 }}
+        initial={{ opacity: 0.4, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, amount: 0.5 }}
+        viewport={{ once: true, amount: 0.5 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <p className={`${vt323.className} text-2xl tracking-widest text-[#F08100]`}>- WHAT WE DO -</p>
@@ -71,13 +71,13 @@ export default function Services() {
       </motion.div>
 
       {/* Cards Grid */}
-      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">        {SERVICES.map((service, i) => (
+      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3"> {SERVICES.map((service, i) => (
           <motion.div
             key={service.title}
             className="flex rounded-xl border-2 border-[#2B1608] bg-white text-center shadow-[0_6px_0px_#2B1608]"
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0.4, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.08 }}
             whileHover={{
               y: -8,
@@ -88,14 +88,14 @@ export default function Services() {
             {/* The Link now wraps the entire inner content of the card */}
             <Link 
               href={service.path}
-              className="group flex h-full w-full flex-col items-center gap-4 px-6 py-8 outline-none"
+              className="group flex h-full w-full flex-col items-center gap-4 px-6 py-8 rounded-xl focus-visible:outline focus-visible:outline-5 focus-visible:outline-offset-6 focus-visible:outline-[#F08100]"
             >
               <motion.div
                 className="relative h-20 w-20"
                 animate={{ y: [0, -6, 0] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
               >
-                <Image src={service.icon} alt={service.title} fill unoptimized className="object-contain" />
+                <Image src={service.icon} alt="" fill unoptimized className="object-contain" />
               </motion.div>
 
               <h3
@@ -114,7 +114,7 @@ export default function Services() {
 
               {/* Learn More Text (Visual Only, entire card is clickable) */}
               <div 
-                className={`${vt323.className} mt-2 inline-flex items-center text-2xl text-[#F08100] transition-colors group-hover:text-[#2B1608]`}
+                className={`${vt323.className} mt-2 inline-flex items-center text-2xl text-[#F08100] transition-colors group-hover:text-[#2B1608] group-focus-visible:text-[#2B1608]`}
               >
                 LEARN MORE <span className="ml-2 text-xl">➔</span>
               </div>

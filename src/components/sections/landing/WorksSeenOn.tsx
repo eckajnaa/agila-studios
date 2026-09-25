@@ -58,9 +58,9 @@ export default function WorksSeenOn() {
         {/* Left */}
         <motion.div
           className="shrink-0"
-          initial={{ opacity: 0, x: -50 }}
+          initial={{ opacity: 0.4, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: false, amount: 0.4 }}
+          viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <h2 id="seen-on-heading" className={`${silkscreen.className} whitespace-nowrap tracking-wider text-[clamp(1.5rem,7vw,3rem)] text-orange-100`}>

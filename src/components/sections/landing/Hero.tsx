@@ -65,9 +65,9 @@ export default function Hero() {
         <motion.p
           className="text-2xl tracking-[0.1em]"
           style={{ fontFamily: "var(--font-pixel)", color: "#FFB300" }}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.5 }}
+          viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           A MINECRAFT STUDIO.
@@ -77,18 +77,18 @@ export default function Hero() {
         <motion.h1
           className="text-6xl leading-tight text-white sm:text-7xl md:text-8xl"
           style={{ fontFamily: "var(--font-pixel)" }}
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.5 }}
+          viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.9, ease: "easeOut", delay: 0.2 }}
         >
           DELIVERING CONTENT
           <br />
           <motion.span
             style={{ color: "#FFB300", display: "inline-block" }}
-            initial={{ opacity: 0, scale: 0.75, y: 20 }}
+            initial={{ opacity: 1, scale: 1, y: 0 }}
             whileInView={{ opacity: 1, scale: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.5 }}
+            viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.7, ease: "backOut", delay: 0.5 }}
           >
             SINCE 2019
@@ -98,9 +98,9 @@ export default function Hero() {
         {/* Buttons */}
         <motion.div
           className="mt-6 flex flex-wrap items-center justify-center gap-4"
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.5 }}
+          viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.6, ease: "easeOut", delay: 0.8 }}
         >
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>

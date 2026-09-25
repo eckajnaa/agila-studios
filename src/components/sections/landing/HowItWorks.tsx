@@ -16,9 +16,9 @@ export default function HowItWorks() {
         id="how-heading"
         className="mb-14 text-center tracking-wider text-5xl text-[#2a1a0e] sm:text-6xl font-semibold "
         style={{ fontFamily: "var(--font-pixel)" }}
-        initial={{ opacity: 0, y: 24 }}
+        initial={{ opacity: 0.4, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, amount: 0.5 }}
+        viewport={{ once: true, amount: 0.5 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
         HOW IT WORKS
@@ -29,9 +29,9 @@ export default function HowItWorks() {
           <motion.div
             key={step.number}
             className="flex flex-col gap-3d"
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0.4, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.15 }}
           >
             <div>

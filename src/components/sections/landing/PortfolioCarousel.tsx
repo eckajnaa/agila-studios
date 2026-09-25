@@ -152,7 +152,6 @@ export default function PortfolioCarousel() {
 
         if (Math.abs(step - prevStep) > 1) {
           // Wrapping from one end of the stack to the other: fade out, jump, fade back in
-          // rather than flying across the whole row.
           tl.to(card, { autoAlpha: 0, duration: SLIDE_DURATION / 2, ease: "power1.in" }, 0)
             .set(card, { ...target, autoAlpha: 0, zIndex }, SLIDE_DURATION / 2)
             .to(
@@ -235,7 +234,6 @@ export default function PortfolioCarousel() {
   }
 
   function handleCardClick(index: number) {
-    // A swipe that ends on a card also fires a click; don't let it override the swipe.
     if (drag.current.moved) {
       drag.current.moved = false;
       return;
