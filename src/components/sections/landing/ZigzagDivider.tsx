@@ -11,7 +11,7 @@ export default function ZigzagDivider({
 }: ZigzagDividerProps) {
   const teeth = 6;
   const segW = 1500 / teeth;
-  const height = 70;
+  const height = 40;
 
   const points = Array.from({ length: teeth }, (_, i) => {
     const x0 = i * segW;

@@ -256,7 +256,7 @@ export default function PortfolioCarousel() {
         {/* Header */}
         <div
           data-header
-          className="flex w-full flex-wrap items-end justify-between gap-4 px-10 pt-10 pb-6 sm:px-24 xl:px-44"
+          className="flex w-full flex-wrap items-end justify-between gap-4 px-10 pt-20 pb-6 sm:px-24 xl:px-44"
         >
           <div>
             <p className="text-3xl tracking-[0.3em] text-orange-400" style={{ fontFamily: "var(--font-pixel)" }}>
@@ -371,7 +371,7 @@ export default function PortfolioCarousel() {
         </div>
 
         {/* Dots (with autoplay progress) — arrows move down here on mobile */}
-        <div data-controls className="flex items-center justify-center gap-4 pt-2 pb-8">
+        <div data-controls className="flex items-center justify-center gap-4 pt-2 pb-20">
           <ArrowButton direction="prev" onClick={prev} className="md:hidden" />
 
           <div className="flex gap-2">
