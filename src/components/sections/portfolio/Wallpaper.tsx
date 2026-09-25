@@ -26,6 +26,17 @@ interface WallpaperProps {
 // under the frame's border, hiding any sub-pixel rounding gap.
 const PHOTO_INSET = "15.5% 4% 7.7% 4.2%";
 
+// `sizes` hints for next/image, so the browser downloads a resolution that matches where
+// each image is actually shown.
+// Grid card: one column on mobile, two on tablet, capped by the grid's max width on desktop.
+const GRID_SIZES = "(max-width: 768px) 90vw, (max-width: 1280px) 45vw, 550px";
+// Modal frame: `w-full max-w-4xl` inside the backdrop's `p-6`, i.e. min(100vw - 48px, 896px),
+// which reaches its 896px cap at 944px wide.
+const MODAL_FRAME_SIZES = "(max-width: 944px) calc(100vw - 48px), 896px";
+// Modal photo: the cutout is 91.8% of the frame's width (4.2% + 4% side insets):
+// 0.918 * (100vw - 48px) ≈ 91.8vw - 44px, capped at 0.918 * 896px ≈ 823px.
+const MODAL_PHOTO_SIZES = "(max-width: 944px) calc(91.8vw - 44px), 823px";
+
 const TITLE_PLATE_SHADOW =
   "4px 4px 4px 0 rgba(0,0,0,0.35), inset -2px -2px 2px 0 rgba(0,0,0,0.5), inset 2px 2px 2px 0 rgba(255,255,255,0.4)";
 
@@ -73,7 +84,7 @@ function MediaBadge({ kind }: { kind: BadgeKind }) {
   );
 }
 
-function FrameArt({ title, media }: { title: string; media: ReactNode }) {
+function FrameArt({ title, media, sizes }: { title: string; media: ReactNode; sizes: string }) {
   return (
     <>
       <Image
@@ -81,7 +92,7 @@ function FrameArt({ title, media }: { title: string; media: ReactNode }) {
         alt=""
         fill
         aria-hidden="true"
-        sizes="(max-width: 768px) 90vw, (max-width: 1280px) 45vw, 550px"
+        sizes={sizes}
         className="pointer-events-none object-contain"
       />
       <div className="absolute overflow-hidden border-2 border-black" style={{ inset: PHOTO_INSET }}>
@@ -206,15 +217,10 @@ export default function Wallpaper({
   );
 
   const isVideo = Boolean(youtubeId || videoSrc);
-  const thumbnailImage = (
-    <Image
-      src={src}
-      alt={alt}
-      fill
-      sizes="(max-width: 768px) 90vw, (max-width: 1280px) 45vw, 550px"
-      className="object-cover"
-    />
+  const photo = (sizes: string) => (
+    <Image src={src} alt={alt} fill sizes={sizes} className="object-cover" />
   );
+  const thumbnailImage = photo(GRID_SIZES);
   // External links (Scripts) open a new tab rather than the viewer, so they get no badge.
   const badgeKind: BadgeKind | null = isVideo ? "play" : externalUrl ? null : "view";
   const thumbnailMedia = badgeKind ? (
@@ -225,7 +231,8 @@ export default function Wallpaper({
   ) : (
     thumbnailImage
   );
-  let expandedMedia = thumbnailImage;
+  // Rendered separately from the thumbnail so the modal requests a large enough image.
+  let expandedMedia = photo(MODAL_PHOTO_SIZES);
   if (youtubeId) {
     expandedMedia = (
       <iframe
@@ -253,7 +260,7 @@ export default function Wallpaper({
       className="relative h-full w-full"
       style={{ boxShadow: "0px 0px 0px rgba(0,0,0,0)" }}
     >
-      <FrameArt title={title} media={thumbnailMedia} />
+      <FrameArt title={title} media={thumbnailMedia} sizes={GRID_SIZES} />
     </div>
   );
 
@@ -295,7 +302,7 @@ export default function Wallpaper({
             className="relative aspect-[625/430] w-full max-w-4xl"
             onClick={(event) => event.stopPropagation()}
           >
-            <FrameArt title={title} media={expandedMedia} />
+            <FrameArt title={title} media={expandedMedia} sizes={MODAL_FRAME_SIZES} />
             <button
               ref={closeButtonRef}
               type="button"
