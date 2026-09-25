@@ -2,12 +2,21 @@
 import Image from "next/image";
 import Link from "next/link";
 import { VT323 } from "next/font/google";
+import gsap from "gsap";
 
 const vt323 = VT323({
   weight: "400",
   subsets: ["latin"],
   display: "swap",
 });
+
+function handleIconHoverEnter(event: React.MouseEvent<HTMLElement>) {
+  gsap.to(event.currentTarget, { scale: 1.2, y: -3, duration: 0.25, ease: "back.out(2)" });
+}
+
+function handleIconHoverLeave(event: React.MouseEvent<HTMLElement>) {
+  gsap.to(event.currentTarget, { scale: 1, y: 0, duration: 0.25, ease: "power2.out" });
+}
 
 const SITEMAP = [
   { label: "About", href: "/about" },
@@ -135,7 +144,9 @@ export default function LandingFooter() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
-                  className="transition-colors hover:text-[#F7AC00]"
+                  onMouseEnter={handleIconHoverEnter}
+                  onMouseLeave={handleIconHoverLeave}
+                  className="inline-block transition-colors hover:text-[#F7AC00]"
                 >
                   {social.icon}
                 </a>
