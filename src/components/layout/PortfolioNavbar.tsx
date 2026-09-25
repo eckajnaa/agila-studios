@@ -7,27 +7,32 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { DISCORD_URL } from "@/lib/constants";
-import { usePortfolioCategory } from "@/components/layout/PortfolioCategoryContext";
+import {
+  categoryHash,
+  PORTFOLIO_CATEGORIES,
+  usePortfolioCategory,
+} from "@/components/layout/PortfolioCategoryContext";
 
 const vt323 = VT323({ weight: "400", subsets: ["latin"] });
 const outfit = Outfit({ weight: "700", subsets: ["latin"] });
 
 gsap.registerPlugin(useGSAP);
 
-// Category links match the CategoryTabs sections on the portfolio page.
-const PORTFOLIO_NAV_LINKS = [
-  { label: "Builds", href: "/portfolio#builds" },
-  { label: "Models", href: "/portfolio#models" },
-  { label: "Development", href: "/portfolio#development" },
-  { label: "Editing", href: "/portfolio#editing" },
-  { label: "Scripts", href: "/portfolio#scripts" },
-  { label: "Animation", href: "/portfolio#animation" },
-];
+// Built from the shared category list so the hashes always match what the category
+// provider reads back on refresh (e.g. /portfolio#models).
+const PORTFOLIO_NAV_LINKS = PORTFOLIO_CATEGORIES.map((label) => ({
+  label,
+  href: `/portfolio${categoryHash(label)}`,
+}));
 
 export default function PortfolioNavbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { activeCategory, setActiveCategory } = usePortfolioCategory();
+  const { activeCategory: currentCategory, setActiveCategory, restored } = usePortfolioCategory();
+  // No link is highlighted until the category is restored from the URL, so a refresh on
+  // #development doesn't briefly highlight Builds.
+  const activeCategory = restored ? currentCategory : null;
   const mobileListRef = useRef<HTMLUListElement>(null);
+  const hasPoppedRestored = useRef(false);
 
   // Stagger the mobile menu links in each time the panel opens.
   useGSAP(
@@ -46,6 +51,12 @@ export default function PortfolioNavbar() {
   // Quick scale-pop on whichever nav link just became active (desktop + mobile).
   useGSAP(
     () => {
+      if (!activeCategory) return;
+      // Don't pop the link that's highlighted on page load — only on actual switches.
+      if (!hasPoppedRestored.current) {
+        hasPoppedRestored.current = true;
+        return;
+      }
       const targets = document.querySelectorAll(`[data-nav-link="${activeCategory}"]`);
       if (targets.length === 0) return;
       gsap.fromTo(
