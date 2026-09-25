@@ -1,12 +1,55 @@
 "use client";
+import { useState } from "react";
 import { DISCORD_URL } from "@/lib/constants";
+import { CONTACT_LIMITS } from "@/lib/contact";
 import { motion } from "motion/react";
+import { Silkscreen } from "next/font/google";
+
+const silkscreen = Silkscreen({ weight: "700", subsets: ["latin"], display: "swap" });
+
+type FormStatus = "idle" | "sending" | "success" | "error";
+
+const LABEL_CLASS = "text-xl font-medium text-white";
+const INPUT_CLASS =
+  "rounded border-2 border-transparent bg-[#FFF6E5] px-4 py-2.5 text-lg font-medium text-[#2B1608] placeholder:text-[#2B1608]/55 outline-none transition-colors focus:border-[#F08100] focus:bg-white disabled:opacity-60";
 
 export default function Contact() {
+  const [status, setStatus] = useState<FormStatus>("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    setStatus("sending");
+    setErrorMessage("");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(Object.fromEntries(new FormData(form))),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.error ?? "Something went wrong. Please try again.");
+      }
+      form.reset();
+      setStatus("success");
+    } catch (err) {
+      // fetch itself throws a TypeError when the network is down.
+      setErrorMessage(
+        err instanceof TypeError
+          ? "Couldn't reach the server. Check your connection and try again."
+          : (err as Error).message,
+      );
+      setStatus("error");
+    }
+  }
+
   return (
     <section
       id="contact"
-      className="relative overflow-hidden bg-[#2B1608] px-4 pt-24 pb-15 min-h-[700px] lg:min-h-[800px]"
+      className="relative overflow-hidden bg-[#2B1608] pt-24 pb-15 min-h-[700px] lg:min-h-[800px]"
       aria-labelledby="contact-heading"
     >
       <div
@@ -15,11 +58,11 @@ export default function Contact() {
         aria-hidden="true"
       />
 
-      <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-start gap-12 lg:flex-row lg:items-center">
+      <div className="relative z-10 flex w-full flex-col items-start gap-12 px-10 sm:px-24 lg:flex-row lg:items-center lg:justify-between xl:px-44">
 
         {/* Left — slides in from left */}
         <motion.div
-          className="flex-1"
+          className="relative min-w-0 lg:-top-10 lg:flex-1"
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: false, amount: 0.3 }}
@@ -27,17 +70,20 @@ export default function Contact() {
         >
           <h2
             id="contact-heading"
-            className="tracking-wider font-semibold text-5xl leading-tight text-white sm:text-6xl"
-            style={{ fontFamily: "var(--font-pixel)" }}
+            // Kept on one line: "READY TO CREATE?" is ~13.5em wide in Silkscreen Bold, so the size
+            // tracks the width of its column (full width when stacked, half the row beside the form).
+            className={`${silkscreen.className} whitespace-nowrap tracking-wider leading-tight text-white text-[length:min(calc(7vw-6px),3.5rem)] sm:text-[length:min(calc(7vw-14px),3.5rem)] lg:text-[length:calc(3.25vw-8px)] xl:text-[length:calc(3.25vw-13px)]`}
           >
             READY TO CREATE?
           </h2>
           <p
-            className="mt-4 mb-10 max-w-xs text-xl leading-relaxed text-white/80"
+            // Two fixed lines on desktop; the longer line is ~24.5em wide, so the size tracks the column
+            // like the heading above (capped at 22px). Wraps naturally when stacked on smaller screens.
+            className="mt-4 mb-10 max-w-md text-xl leading-relaxed text-white/80 lg:max-w-none lg:whitespace-nowrap lg:text-[length:min(calc(2.04vw-5px),1.375rem)] xl:text-[length:min(calc(2.04vw-8px),1.375rem)]"
             style={{ fontFamily: "var(--font-body)" }}
           >
-            Have a project in mind? Reach out via Discord or email and let&apos;s
-            build something extraordinary together.
+            Have a project in mind? Reach out via Discord or email <br className="hidden lg:block" />
+            and let&apos;s build something extraordinary together.
           </p>
           <motion.a
             href={DISCORD_URL}
@@ -52,54 +98,107 @@ export default function Contact() {
 
         {/* Right — form slides in from right */}
         <motion.div
-          className="w-full max-w-md rounded-xl border-2 border-white bg-white/20 p-6 backdrop-blur-sm"
+          className="w-full max-w-2xl rounded-xl border-2 border-white bg-white/20 p-6 backdrop-blur-sm lg:flex-1"
           initial={{ opacity: 0, x: 50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: false, amount: 0.3 }}
           transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
         >
-          <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-5">
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="subject" className="text-xl font-medium text-white" style={{ fontFamily: "var(--font-body)" }}>
-                Subject
-              </label>
-              <input
-              id="subject"
-              name="subject"
-              type="text"
-              required
-              placeholder="e.g. Custom build for my SMP"
-              className="rounded border border-white/30 bg-white/30 px-4 py-2.5 text-base font-medium text-[#2B1608] placeholder:text-white/50 outline-none focus:border-white focus:bg-white/50"
-              style={{ fontFamily: "var(--font-body)" }}
-            />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="message" className="text-xl font-medium text-white" style={{ fontFamily: "var(--font-body)" }}>
-                Message
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                required
-                rows={5}
-                placeholder="Tell us about your project…"
-                className="rounded border border-white/30 bg-white/30 px-4 py-2.5 text-base font-medium text-[#2B1608] placeholder:text-white/50 outline-none focus:border-white focus:bg-white/50"
-                style={{ fontFamily: "var(--font-body)" }}
-              />
-            </div>
-
-            <div className="flex justify-end">
-              <motion.button
-                type="submit"
-className="flex translate-y-0 items-center gap-2 rounded border border-white bg-transparent px-4 py-1 text-lg font-semibold text-white shadow-[0_4px_0px_rgba(255,255,255,0.4)] transition-all duration-150 hover:translate-y-[4px] hover:shadow-none cursor-pointer"                style={{ fontFamily: "var(--font-body)" }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+          {status === "success" ? (
+            <div role="status" className="flex flex-col items-center gap-4 py-10 text-center" style={{ fontFamily: "var(--font-body)" }}>
+              <p className="text-3xl text-white" style={{ fontFamily: "var(--font-pixel)" }}>
+                MESSAGE SENT!
+              </p>
+              <p className="max-w-xs text-lg text-white/80">
+                Thanks for reaching out — we&apos;ll get back to you by email soon.
+              </p>
+              <button
+                type="button"
+                onClick={() => setStatus("idle")}
+                className="mt-2 cursor-pointer text-base font-semibold text-white underline underline-offset-4 hover:text-orange-200"
               >
-                Send →
-              </motion.button>
+                Send another message
+              </button>
             </div>
-          </form>
+          ) : (
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5" style={{ fontFamily: "var(--font-body)" }}>
+              {/* Disabling the fieldset locks every input while the request is in flight */}
+              <fieldset disabled={status === "sending"} className="flex flex-col gap-5">
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div className="flex flex-col gap-1.5">
+                    <label htmlFor="name" className={LABEL_CLASS}>Name</label>
+                    <input
+                      id="name"
+                      name="name"
+                      type="text"
+                      autoComplete="name"
+                      required
+                      maxLength={CONTACT_LIMITS.name}
+                      placeholder="Your name"
+                      className={INPUT_CLASS}
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label htmlFor="email" className={LABEL_CLASS}>Email</label>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      maxLength={CONTACT_LIMITS.email}
+                      placeholder="you@example.com"
+                      className={INPUT_CLASS}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="subject" className={LABEL_CLASS}>Subject</label>
+                  <input
+                    id="subject"
+                    name="subject"
+                    type="text"
+                    required
+                    maxLength={CONTACT_LIMITS.subject}
+                    placeholder="e.g. Custom build for my SMP"
+                    className={INPUT_CLASS}
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="message" className={LABEL_CLASS}>Message</label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    required
+                    rows={5}
+                    maxLength={CONTACT_LIMITS.message}
+                    placeholder="Tell us about your project…"
+                    className={INPUT_CLASS}
+                  />
+                </div>
+              </fieldset>
+
+              {status === "error" && (
+                <p role="alert" className="rounded border border-red-300/60 bg-red-500/25 px-4 py-2.5 text-base font-medium text-white">
+                  {errorMessage}
+                </p>
+              )}
+
+              <div className="flex justify-end">
+                <motion.button
+                  type="submit"
+                  disabled={status === "sending"}
+                  className="flex translate-y-0 cursor-pointer items-center gap-2 rounded border border-white bg-transparent px-4 py-1 text-lg font-semibold text-white shadow-[0_4px_0px_rgba(255,255,255,0.4)] transition-all duration-150 hover:translate-y-[4px] hover:shadow-none disabled:cursor-wait disabled:opacity-70"
+                  whileHover={status === "sending" ? undefined : { scale: 1.05 }}
+                  whileTap={status === "sending" ? undefined : { scale: 0.95 }}
+                >
+                  {status === "sending" ? "Sending…" : "Send →"}
+                </motion.button>
+              </div>
+            </form>
+          )}
         </motion.div>
       </div>
 
