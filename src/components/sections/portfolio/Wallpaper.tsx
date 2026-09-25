@@ -49,14 +49,24 @@ const PLAY_PATH = PLAY_ROWS.map((width, y) => `M0 ${y}h${width}v1H0z`).join("");
 const VIEW_PATH =
   "M0 0h4v1H1v3H0zM6 0h4v4H9V1H6zM0 6h1v3h3v1H0zM9 6h1v4H6V9h3z";
 
+// Pixel-art "external link" arrow ↗ on a 10x10 grid: a 2px-thick corner for the arrowhead,
+// plus a 2px-wide diagonal staircase for the shaft.
+const EXTERNAL_PATH =
+  "M4 0h6v6H8V2H4z" +
+  [6, 5, 4, 3, 2, 1, 0].map((x, i) => `M${x} ${i + 2}h2v1H${x}z`).join("") +
+  "M0 9h1v1H0z";
+
 const BADGES = {
   play: { label: "PLAY", viewBox: "0 0 9 10", path: PLAY_PATH, iconSize: "h-5 w-[1.125rem] sm:h-6 sm:w-[1.35rem]" },
   view: { label: "VIEW", viewBox: "0 0 10 10", path: VIEW_PATH, iconSize: "h-5 w-5 sm:h-6 sm:w-6" },
+  // External links (the Scripts' Google Docs) open in a new tab.
+  read: { label: "READ", viewBox: "0 0 10 10", path: EXTERNAL_PATH, iconSize: "h-5 w-5 sm:h-6 sm:w-6" },
 } as const;
 
 type BadgeKind = keyof typeof BADGES;
 
-// Hover badge telling the visitor what clicking does: PLAY for videos, VIEW for images.
+// Hover badge telling the visitor what clicking does: PLAY for videos, VIEW for images,
+// READ for external documents.
 // Styled like the frame's title plate (same bevel) so it reads as part of the frame art.
 // Purely decorative: the card stays the only interactive element and carries the label.
 function MediaBadge({ kind }: { kind: BadgeKind }) {
@@ -221,15 +231,12 @@ export default function Wallpaper({
     <Image src={src} alt={alt} fill sizes={sizes} className="object-cover" />
   );
   const thumbnailImage = photo(GRID_SIZES);
-  // External links (Scripts) open a new tab rather than the viewer, so they get no badge.
-  const badgeKind: BadgeKind | null = isVideo ? "play" : externalUrl ? null : "view";
-  const thumbnailMedia = badgeKind ? (
+  const badgeKind: BadgeKind = isVideo ? "play" : externalUrl ? "read" : "view";
+  const thumbnailMedia = (
     <>
       {thumbnailImage}
       <MediaBadge kind={badgeKind} />
     </>
-  ) : (
-    thumbnailImage
   );
   // Rendered separately from the thumbnail so the modal requests a large enough image.
   let expandedMedia = photo(MODAL_PHOTO_SIZES);
@@ -272,6 +279,7 @@ export default function Wallpaper({
           href={externalUrl}
           target="_blank"
           rel="noopener noreferrer"
+          aria-label={`Read ${alt}${externalUrl.includes("docs.google.com") ? " in Google Docs" : ""} (opens in a new tab)`}
           className={cardClassName}
         >
           {cardInner}
