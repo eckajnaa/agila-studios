@@ -38,3 +38,8 @@ export const SITEMAP_LINKS: NavLink[] = [
 ];
 
 export const SITE_NAME = "Agila Studios";
+
+export const SITE_URL = "https://agila.devs.team";
+
+export const SITE_DESCRIPTION =
+  "Agila Studios — a Minecraft content studio covering builds, 3D modeling, development, video editing, scripting, and animation.";
