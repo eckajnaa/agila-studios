@@ -2,7 +2,8 @@
 
 import { Silkscreen, Outfit } from "next/font/google";
 import { motion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { onPreloaderDone } from "@/lib/preloaderStatus";
 
 const silkscreen = Silkscreen({
   weight: "400",
@@ -24,6 +25,14 @@ export default function Hero() {
     offset: ["start start", "end start"],
   });
   const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+
+  // This hero is the first thing on the page, so it's already covered by the
+  // fixed-position Preloader at load — a scroll-triggered whileInView would
+  // fire and finish while still hidden behind it. Gate the reveal on the
+  // preloader actually being done instead (no scroll needed either way, since
+  // this content is visible the moment the preloader clears).
+  const [ready, setReady] = useState(false);
+  useEffect(() => onPreloaderDone(() => setReady(true)), []);
 
   return (
     <section
@@ -51,8 +60,7 @@ export default function Hero() {
           <motion.h1
             className="flex flex-col items-center"
             initial={{ y: 20 }}
-            whileInView={{ y: 0 }}
-            viewport={{ once: true, amount: 0.5 }}
+            animate={{ y: ready ? 0 : 20 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
             <span
@@ -73,8 +81,7 @@ export default function Hero() {
                 textShadow: "3px 3px 0px #000",
               }}
               initial={{ y: 30 }}
-              whileInView={{ y: 0 }}
-              viewport={{ once: true, amount: 0.5 }}
+              animate={{ y: ready ? 0 : 30 }}
               transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
             >
               AGILA
@@ -86,8 +93,7 @@ export default function Hero() {
         <motion.div
           className="mx-auto mt-16 max-w-5xl space-y-8 text-center"
           initial={{ y: 24 }}
-          whileInView={{ y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
+          animate={{ y: ready ? 0 : 24 }}
           transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
         >
           <p
