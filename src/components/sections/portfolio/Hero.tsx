@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { Outfit, Silkscreen } from "next/font/google";
 import { useRef } from "react";
+import { onPreloaderDone } from "@/lib/preloaderStatus";
 
 const silkscreen = Silkscreen({ weight: "400", subsets: ["latin"] });
 const outfit = Outfit({ weight: "400", subsets: ["latin"] });
@@ -24,17 +25,27 @@ export default function Hero() {
     // browser wrap mid-word ("Agila Stud / ios") on narrow screens.
     const split = new SplitText(headingRef.current, { type: "words,chars" });
 
-    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-    tl.from(split.chars, { opacity: 0, y: 40, duration: 0.6, stagger: 0.04 })
-      .from(subtitleRef.current, { opacity: 0, y: 20, duration: 0.5 }, "-=0.25")
-      .fromTo(
-        sectionRef.current,
-        { borderBottomWidth: 0 },
-        { borderBottomWidth: 10, duration: 0.5, ease: "power2.out" },
-        "-=0.3",
-      );
+    // This hero is the first thing on the page, so it's already covered by the
+    // fixed-position Preloader at load — playing the reveal immediately on
+    // mount meant it ran and finished while still hidden behind it. Set the
+    // hidden state now, but hold the actual animation until the preloader is
+    // actually done.
+    gsap.set(split.chars, { opacity: 0, y: 40 });
+    gsap.set(subtitleRef.current, { opacity: 0, y: 20 });
+    gsap.set(sectionRef.current, { borderBottomWidth: 0 });
 
-    return () => split.revert();
+    const unsubscribe = onPreloaderDone(() => {
+      gsap
+        .timeline({ defaults: { ease: "power3.out" } })
+        .to(split.chars, { opacity: 1, y: 0, duration: 0.6, stagger: 0.04 })
+        .to(subtitleRef.current, { opacity: 1, y: 0, duration: 0.5 }, "-=0.25")
+        .to(sectionRef.current, { borderBottomWidth: 10, duration: 0.5, ease: "power2.out" }, "-=0.3");
+    });
+
+    return () => {
+      unsubscribe();
+      split.revert();
+    };
   });
 
   // Subtle parallax drift on the grid background as the hero scrolls past.
