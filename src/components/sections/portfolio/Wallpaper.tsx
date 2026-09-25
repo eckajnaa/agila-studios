@@ -29,6 +29,50 @@ const PHOTO_INSET = "15.5% 4% 7.7% 4.2%";
 const TITLE_PLATE_SHADOW =
   "4px 4px 4px 0 rgba(0,0,0,0.35), inset -2px -2px 2px 0 rgba(0,0,0,0.5), inset 2px 2px 2px 0 rgba(255,255,255,0.4)";
 
+// Pixel-art play triangle: 10 rows whose widths grow and shrink in 2px steps, giving a
+// near-equilateral ▶ that stays crisp at any size.
+const PLAY_ROWS = [1, 3, 5, 7, 9, 9, 7, 5, 3, 1];
+const PLAY_PATH = PLAY_ROWS.map((width, y) => `M0 ${y}h${width}v1H0z`).join("");
+
+// Pixel-art "expand" icon: four corner brackets on a 10x10 grid.
+const VIEW_PATH =
+  "M0 0h4v1H1v3H0zM6 0h4v4H9V1H6zM0 6h1v3h3v1H0zM9 6h1v4H6V9h3z";
+
+const BADGES = {
+  play: { label: "PLAY", viewBox: "0 0 9 10", path: PLAY_PATH, iconSize: "h-5 w-[1.125rem] sm:h-6 sm:w-[1.35rem]" },
+  view: { label: "VIEW", viewBox: "0 0 10 10", path: VIEW_PATH, iconSize: "h-5 w-5 sm:h-6 sm:w-6" },
+} as const;
+
+type BadgeKind = keyof typeof BADGES;
+
+// Hover badge telling the visitor what clicking does: PLAY for videos, VIEW for images.
+// Styled like the frame's title plate (same bevel) so it reads as part of the frame art.
+// Purely decorative: the card stays the only interactive element and carries the label.
+function MediaBadge({ kind }: { kind: BadgeKind }) {
+  const badge = BADGES[kind];
+  return (
+    // Fades in on hover or keyboard focus; always visible on touch screens, which can't hover.
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-80 group-focus-visible:opacity-80 [@media(hover:none)]:opacity-80"
+    >
+      {/* Soft shadow behind the badge so it stands out on bright thumbnails */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.45)_0%,rgba(0,0,0,0.15)_35%,transparent_65%)]" />
+      <div
+        className="relative flex items-center gap-2.5 rounded-sm border-2 border-black bg-[#F08100] px-4 py-2 transition-transform duration-200 ease-out group-hover:scale-110 sm:gap-3 sm:px-5 sm:py-2.5"
+        style={{ boxShadow: TITLE_PLATE_SHADOW }}
+      >
+        <svg viewBox={badge.viewBox} shapeRendering="crispEdges" fill="#2B1608" className={badge.iconSize}>
+          <path d={badge.path} />
+        </svg>
+        <span className={`text-2xl leading-none tracking-[0.2em] text-[#2B1608] sm:text-3xl ${vt323.className}`}>
+          {badge.label}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 function FrameArt({ title, media }: { title: string; media: ReactNode }) {
   return (
     <>
@@ -136,7 +180,8 @@ export default function Wallpaper({
     { dependencies: [isOpen, shouldRender] },
   );
 
-  const thumbnailMedia = (
+  const isVideo = Boolean(youtubeId || videoSrc);
+  const thumbnailImage = (
     <Image
       src={src}
       alt={alt}
@@ -145,7 +190,17 @@ export default function Wallpaper({
       className="object-cover"
     />
   );
-  let expandedMedia = thumbnailMedia;
+  // External links (Scripts) open a new tab rather than the viewer, so they get no badge.
+  const badgeKind: BadgeKind | null = isVideo ? "play" : externalUrl ? null : "view";
+  const thumbnailMedia = badgeKind ? (
+    <>
+      {thumbnailImage}
+      <MediaBadge kind={badgeKind} />
+    </>
+  ) : (
+    thumbnailImage
+  );
+  let expandedMedia = thumbnailImage;
   if (youtubeId) {
     expandedMedia = (
       <iframe
@@ -164,7 +219,7 @@ export default function Wallpaper({
     );
   }
 
-  const cardClassName = "relative block aspect-[625/430] w-full cursor-pointer text-left";
+  const cardClassName = "group relative block aspect-[625/430] w-full cursor-pointer text-left";
   const cardInner = (
     <div
       ref={innerRef}
@@ -194,6 +249,7 @@ export default function Wallpaper({
           ref={cardRef as Ref<HTMLButtonElement>}
           type="button"
           onClick={openModal}
+          aria-label={isVideo ? `Play video: ${alt}` : `View image: ${alt}`}
           className={cardClassName}
         >
           {cardInner}
