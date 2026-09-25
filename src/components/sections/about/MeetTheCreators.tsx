@@ -63,16 +63,6 @@ const CREATORS = [
     image: "/images/creators/daniel-pridas.webp",
     skills: ["Game Design & Concept Artist", "Quality Assurance"],
   },
-  {
-    name: "Obvi",
-    role: "Lead Obvi",
-    image: "/images/creators/obvi.webp",
-    skills: [
-      "Everything Above and More Obviously.",
-      "Creator",
-      "All goods",
-    ],
-  },
 ];
 
 export default function MeetTheCreators() {
