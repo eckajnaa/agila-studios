@@ -53,8 +53,10 @@ export default function Contact() {
       aria-labelledby="contact-heading"
     >
       <div
-        className="absolute inset-0 bg-cover bg-bottom bg-no-repeat opacity-90"
-        style={{ backgroundImage: "url('/images/ContactBackground.svg')" }}
+        // Plain JPEG on its own GPU layer: the form card's backdrop blur re-samples this on every
+        // keystroke, which was slow when it was an 890 KB SVG wrapping the same photo.
+        className="absolute inset-0 transform-gpu bg-cover bg-bottom bg-no-repeat opacity-90"
+        style={{ backgroundImage: "url('/images/ContactBackground.jpg')" }}
         aria-hidden="true"
       />
 
