@@ -48,42 +48,45 @@ export default function Hero() {
 
       {/* WE ARE + AGILA */}
         <div className="flex flex-col items-center text-center">
-          <motion.p
-            className="text-3xl tracking-widest sm:text-4xl md:text-5xl"
-            style={{
-              fontFamily: "var(--font-silkscreen)",
-              color: "#FFB300",
-              textShadow: "2px 2px 0px #000",
-            }}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+          <motion.h1
+            className="flex flex-col items-center"
+            initial={{ y: 20 }}
+            whileInView={{ y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            WE ARE
-          </motion.p>
-
-          <motion.h1
-            className="mt-2 leading-none text-7xl sm:text-8xl md:text-[128px]"
-            style={{
-              fontFamily: "var(--font-silkscreen)",
-              color: "#F28C00",
-              textShadow: "3px 3px 0px #000",
-            }}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
-          >
-            AGILA
+            <span
+              className="text-3xl tracking-widest sm:text-4xl md:text-5xl"
+              style={{
+                fontFamily: "var(--font-silkscreen)",
+                color: "#FFB300",
+                textShadow: "2px 2px 0px #000",
+              }}
+            >
+              WE ARE
+            </span>
+            <motion.span
+              className="mt-2 leading-none text-7xl sm:text-8xl md:text-[128px]"
+              style={{
+                fontFamily: "var(--font-silkscreen)",
+                color: "#F28C00",
+                textShadow: "3px 3px 0px #000",
+              }}
+              initial={{ y: 30 }}
+              whileInView={{ y: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
+            >
+              AGILA
+            </motion.span>
           </motion.h1>
         </div>
 
         {/* Body paragraphs */}
         <motion.div
           className="mx-auto mt-16 max-w-5xl space-y-8 text-center"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ y: 24 }}
+          whileInView={{ y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
         >
