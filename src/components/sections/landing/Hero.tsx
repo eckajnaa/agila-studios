@@ -1,15 +1,42 @@
 "use client";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+
+const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
   const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+
+  // Video layer state: `render` gates whether the <video> mounts at all,
+  // `visible` drives the fade-out on end/error. Both start false so SSR and
+  // the first client render match (server has no window to check).
+  const [video, setVideo] = useState({ render: false, visible: false });
+
+  useEffect(() => {
+    if (window.matchMedia(REDUCED_MOTION).matches) return;
+    // Deciding whether to mount the intro video reads matchMedia, which only
+    // exists client-side; it can't be computed during render without diverging
+    // from the server-rendered markup, so this has to run post-mount. A plain
+    // page refresh remounts the component from scratch, so the video plays
+    // again naturally — no persistence needed to get that "refresh to replay"
+    // behavior (sessionStorage would actually break it, since it survives reloads).
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setVideo({ render: true, visible: true });
+  }, []);
+
+  useEffect(() => {
+    if (!video.render) return;
+    // Autoplay can still be rejected in rare cases even when muted — fall
+    // back to the static background immediately if that happens.
+    videoRef.current?.play().catch(() => setVideo((v) => ({ ...v, visible: false })));
+  }, [video.render]);
 
   return (
     <section
@@ -27,6 +54,27 @@ export default function Hero() {
         }}
         aria-hidden="true"
       />
+
+      {/* Intro video — plays once per session over the static background, then
+          fades out to reveal it. Never renders for prefers-reduced-motion. */}
+      {video.render && (
+        <motion.video
+          ref={videoRef}
+          className="absolute inset-0 h-full w-full object-cover"
+          style={{ scale: 1.1 }}
+          animate={{ opacity: video.visible ? 1 : 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          poster="/images/hero-video-poster.jpg"
+          muted
+          playsInline
+          preload="auto"
+          onEnded={() => setVideo((v) => ({ ...v, visible: false }))}
+          onError={() => setVideo((v) => ({ ...v, visible: false }))}
+          aria-hidden="true"
+        >
+          <source src="/videos/hero-loop.mp4" type="video/mp4" />
+        </motion.video>
+      )}
 
       <div
         className="absolute inset-0"
