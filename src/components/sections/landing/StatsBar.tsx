@@ -34,9 +34,9 @@ export default function StatsBar() {
           <motion.div
             key={stat.label}
             className="flex flex-col items-center gap-1"
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0.4, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.5 }}
+            viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.15 }}
           >
             <span

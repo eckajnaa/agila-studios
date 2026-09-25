@@ -19,9 +19,9 @@ export default function FAQ() {
         id="faq-heading"
         className="tracking-wider mb-12 text-center text-5xl text-[#2a1a0e] sm:text-6xl font-semibold"
         style={{ fontFamily: "var(--font-pixel)" }}
-        initial={{ opacity: 0, y: 24 }}
+        initial={{ opacity: 0.4, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, amount: 0.5 }}
+        viewport={{ once: true, amount: 0.5 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
         FAQ
@@ -34,9 +34,9 @@ export default function FAQ() {
             <motion.div
               key={item.id}
               className="rounded-lg border-2 border-[#2B1608] bg-white overflow-hidden"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0.4, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.4, ease: "easeOut", delay: i * 0.08 }}
             >
               <button

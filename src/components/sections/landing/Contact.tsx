@@ -10,8 +10,9 @@ const silkscreen = Silkscreen({ weight: "700", subsets: ["latin"], display: "swa
 type FormStatus = "idle" | "sending" | "success" | "error";
 
 const LABEL_CLASS = "text-xl font-medium text-white";
+// ADDED w-full here
 const INPUT_CLASS =
-  "rounded border-2 border-transparent bg-[#FFF6E5] px-4 py-2.5 text-lg font-medium text-[#2B1608] placeholder:text-[#2B1608]/55 outline-none transition-colors focus:border-black focus:bg-white disabled:opacity-60";
+  "w-full rounded border-2 border-transparent bg-[#FFF6E5] px-4 py-2.5 text-lg font-medium text-[#2B1608] placeholder:text-[#2B1608]/55 outline-none transition-colors focus:border-black focus:bg-white disabled:opacity-60";
 
 export default function Contact() {
   const [status, setStatus] = useState<FormStatus>("idle");
@@ -60,27 +61,23 @@ export default function Contact() {
         aria-hidden="true"
       />
 
-      <div className="relative z-10 flex w-full flex-col items-start gap-12 px-10 sm:px-24 lg:flex-row lg:items-center lg:justify-between xl:px-44">
+      <div className="relative z-10 flex w-full flex-col items-start gap-12 px-4 sm:px-10 md:px-24 lg:flex-row lg:items-center lg:justify-between xl:px-44">
 
         {/* Left — slides in from left */}
         <motion.div
           className="relative min-w-0 lg:-top-10 lg:flex-1"
-          initial={{ opacity: 0, x: -50 }}
+          initial={{ opacity: 0.4, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: false, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
         >
           <h2
             id="contact-heading"
-            // Kept on one line: "READY TO CREATE?" is ~13.5em wide in Silkscreen Bold, so the size
-            // tracks the width of its column (full width when stacked, half the row beside the form).
             className={`${silkscreen.className} whitespace-nowrap tracking-wider leading-tight text-white text-[length:min(calc(7vw-6px),3.5rem)] sm:text-[length:min(calc(7vw-14px),3.5rem)] lg:text-[length:calc(3.25vw-8px)] xl:text-[length:calc(3.25vw-13px)]`}
           >
             READY TO CREATE?
           </h2>
           <p
-            // Two fixed lines on desktop; the longer line is ~24.5em wide, so the size tracks the column
-            // like the heading above (capped at 22px). Wraps naturally when stacked on smaller screens.
             className="mt-4 mb-10 max-w-md text-xl leading-relaxed text-white/80 lg:max-w-none lg:whitespace-nowrap lg:text-[length:min(calc(2.04vw-5px),1.375rem)] xl:text-[length:min(calc(2.04vw-8px),1.375rem)]"
             style={{ fontFamily: "var(--font-body)" }}
           >
@@ -100,10 +97,10 @@ export default function Contact() {
 
         {/* Right — form slides in from right */}
         <motion.div
-          className="w-full max-w-2xl rounded-xl border-2 border-white bg-white/20 p-6 backdrop-blur-sm lg:flex-1"
-          initial={{ opacity: 0, x: 50 }}
+          className="w-full max-w-2xl rounded-xl border-2 border-white bg-white/20 p-4 sm:p-6 backdrop-blur-sm lg:flex-1"
+          initial={{ opacity: 0.4, x: 50 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: false, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
         >
           {/* Success message and form share one grid cell: the form stays mounted (just hidden)
@@ -122,7 +119,8 @@ export default function Contact() {
                   <input id={HONEYPOT_FIELD} name={HONEYPOT_FIELD} type="text" tabIndex={-1} autoComplete="off" />
                 </div>
 
-                <fieldset disabled={status === "sending"} className="flex flex-col gap-5">
+                {/* ADDED min-w-0 to the fieldset */}
+                <fieldset disabled={status === "sending"} className="flex min-w-0 flex-col gap-5">
                   <div className="grid gap-5 sm:grid-cols-2">
                     <div className="flex flex-col gap-1.5">
                       <label htmlFor="name" className={LABEL_CLASS}>Name</label>
