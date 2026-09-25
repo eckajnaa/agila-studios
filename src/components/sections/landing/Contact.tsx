@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { DISCORD_URL } from "@/lib/constants";
-import { CONTACT_LIMITS } from "@/lib/contact";
+import { CONTACT_LIMITS, HONEYPOT_FIELD } from "@/lib/contact";
 import { motion } from "motion/react";
 import { Silkscreen } from "next/font/google";
 
@@ -114,6 +114,12 @@ export default function Contact() {
               style={{ fontFamily: "var(--font-body)" }}
             >
                 {/* Disabling the fieldset locks every input while the request is in flight */}
+                {/* Spam trap: moved off-screen and skipped by keyboard and screen readers, so only bots fill it */}
+                <div aria-hidden="true" className="absolute left-[-9999px] top-0 h-px w-px overflow-hidden">
+                  <label htmlFor={HONEYPOT_FIELD}>Leave this field empty</label>
+                  <input id={HONEYPOT_FIELD} name={HONEYPOT_FIELD} type="text" tabIndex={-1} autoComplete="off" />
+                </div>
+
                 <fieldset disabled={status === "sending"} className="flex flex-col gap-5">
                   <div className="grid gap-5 sm:grid-cols-2">
                     <div className="flex flex-col gap-1.5">

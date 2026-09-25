@@ -12,3 +12,7 @@ export const CONTACT_LIMITS = {
 export type ContactField = keyof typeof CONTACT_LIMITS;
 
 export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Hidden "trap" field: invisible to people, but spam bots tend to fill in every input.
+// Any submission with a value here is silently dropped.
+export const HONEYPOT_FIELD = "website";

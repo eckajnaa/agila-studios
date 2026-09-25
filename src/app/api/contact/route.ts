@@ -9,9 +9,46 @@
  *   CONTACT_TO_EMAIL    — inbox that receives the messages
  *   CONTACT_FROM_EMAIL  — sender; defaults to Resend's test address, which can only
  *                         deliver to the Resend account's own email until a domain is verified
+ *
+ * Spam protection: a honeypot field (bots that fill it get a fake success and nothing is
+ * sent) and a per-IP rate limit.
  */
 
-import { CONTACT_LIMITS, EMAIL_PATTERN, type ContactField } from "@/lib/contact";
+import { CONTACT_LIMITS, EMAIL_PATTERN, HONEYPOT_FIELD, type ContactField } from "@/lib/contact";
+
+const RATE_LIMIT_MAX = 3;
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+
+// In-memory, so it resets on restart and isn't shared between server instances —
+// enough to stop one visitor or script hammering the form, not a hard guarantee.
+const recentSubmissions = new Map<string, number[]>();
+
+function isRateLimited(ip: string) {
+  const now = Date.now();
+  const recent = (recentSubmissions.get(ip) ?? []).filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
+  if (recent.length >= RATE_LIMIT_MAX) {
+    recentSubmissions.set(ip, recent);
+    return true;
+  }
+  recent.push(now);
+  recentSubmissions.set(ip, recent);
+
+  // Keep the map from growing forever on a long-running server.
+  if (recentSubmissions.size > 5000) {
+    for (const [key, times] of recentSubmissions) {
+      if (times.every((t) => now - t >= RATE_LIMIT_WINDOW_MS)) recentSubmissions.delete(key);
+    }
+  }
+  return false;
+}
+
+function clientIp(request: Request) {
+  return (
+    request.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+    request.headers.get("x-real-ip") ||
+    "unknown"
+  );
+}
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -21,7 +58,20 @@ export async function POST(request: Request) {
     return Response.json({ error: "Invalid request." }, { status: 400 });
   }
 
-  const input = (body ?? {}) as Partial<Record<ContactField, unknown>>;
+  const input = (body ?? {}) as Partial<Record<ContactField | typeof HONEYPOT_FIELD, unknown>>;
+
+  // Pretend it worked so the bot has no reason to retry differently.
+  if (typeof input[HONEYPOT_FIELD] === "string" && input[HONEYPOT_FIELD].trim() !== "") {
+    return Response.json({ ok: true });
+  }
+
+  if (isRateLimited(clientIp(request))) {
+    return Response.json(
+      { error: "You've sent a few messages already — please wait a few minutes and try again." },
+      { status: 429 },
+    );
+  }
+
   const fields = {} as Record<ContactField, string>;
 
   for (const key of Object.keys(CONTACT_LIMITS) as ContactField[]) {
