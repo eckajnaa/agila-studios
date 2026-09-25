@@ -38,6 +38,43 @@ const CARD_WIDTH = "w-[78vw] sm:w-[420px] lg:w-[480px]";
 
 const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
 
+// Chunky pressable button in the same style as the navbar's Join Discord button,
+// with a pixel-art chevron to match the blocky theme.
+function ArrowButton({
+  direction,
+  onClick,
+  size = "sm",
+  className = "",
+}: {
+  direction: "prev" | "next";
+  onClick: () => void;
+  size?: "sm" | "lg";
+  className?: string;
+}) {
+  const box = size === "lg" ? "h-14 w-14" : "h-11 w-11";
+  const icon = size === "lg" ? "h-5 w-5" : "h-4 w-4";
+  const nudge = direction === "prev" ? "group-hover:-translate-x-1" : "group-hover:translate-x-1";
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={direction === "prev" ? "Previous project" : "Next project"}
+      className={`group flex ${box} translate-y-0 cursor-pointer items-center justify-center rounded-[0.4375rem] border-2 border-[#2B1608] bg-[#F08100] text-[#2B1608] shadow-[0_0.375rem_0_0_#BF500D] transition-all duration-150 hover:translate-y-[0.375rem] hover:bg-orange-400 hover:shadow-[0_0_0_0_#BF500D] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F7AC00] ${className}`}
+    >
+      <svg
+        viewBox="0 0 8 7"
+        shapeRendering="crispEdges"
+        fill="currentColor"
+        aria-hidden
+        className={`${icon} transition-transform duration-150 ${nudge} ${direction === "prev" ? "-scale-x-100" : ""}`}
+      >
+        <path d="M2 0h2v1H2zM3 1h2v1H3zM4 2h2v1H4zM5 3h2v1H5zM4 4h2v1H4zM3 5h2v1H3zM2 6h2v1H2z" />
+      </svg>
+    </button>
+  );
+}
+
 // Signed distance from the active card, wrapped so the stack loops (e.g. -2..2 for 5 cards).
 function stepFromActive(index: number, active: number) {
   const n = PROJECTS.length;
@@ -325,28 +362,17 @@ export default function PortfolioCarousel() {
           })}
 
           {/* Desktop arrows sit on top of the stack */}
-          <button type="button" onClick={prev} aria-label="Previous project"
-            className="absolute left-4 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-orange-500 text-white shadow-lg transition-colors hover:bg-orange-400 md:flex">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-6 w-6">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-          </button>
-          <button type="button" onClick={next} aria-label="Next project"
-            className="absolute right-4 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-orange-500 text-white shadow-lg transition-colors hover:bg-orange-400 md:flex">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-6 w-6">
-              <path d="M9 18l6-6-6-6" />
-            </svg>
-          </button>
+          <div className="absolute left-6 top-1/2 z-20 hidden -translate-y-1/2 md:block">
+            <ArrowButton direction="prev" onClick={prev} size="lg" />
+          </div>
+          <div className="absolute right-6 top-1/2 z-20 hidden -translate-y-1/2 md:block">
+            <ArrowButton direction="next" onClick={next} size="lg" />
+          </div>
         </div>
 
         {/* Dots (with autoplay progress) — arrows move down here on mobile */}
         <div data-controls className="flex items-center justify-center gap-4 pt-2 pb-8">
-          <button type="button" onClick={prev} aria-label="Previous project"
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-500 text-white transition-colors hover:bg-orange-400 md:hidden">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-5 w-5">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-          </button>
+          <ArrowButton direction="prev" onClick={prev} className="md:hidden" />
 
           <div className="flex gap-2">
             {PROJECTS.map((project, i) => (
@@ -368,12 +394,7 @@ export default function PortfolioCarousel() {
             ))}
           </div>
 
-          <button type="button" onClick={next} aria-label="Next project"
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-500 text-white transition-colors hover:bg-orange-400 md:hidden">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-5 w-5">
-              <path d="M9 18l6-6-6-6" />
-            </svg>
-          </button>
+          <ArrowButton direction="next" onClick={next} className="md:hidden" />
         </div>
       </section>
 
