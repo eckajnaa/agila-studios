@@ -240,11 +240,13 @@ export default function Wallpaper({
   );
   // Rendered separately from the thumbnail so the modal requests a large enough image.
   let expandedMedia = photo(MODAL_PHOTO_SIZES);
+  // Both video types start playing as the modal opens — the card's PLAY badge already asked
+  // for playback. Browsers can still block autoplay, so each keeps its own play controls.
   if (youtubeId) {
     expandedMedia = (
       <iframe
         className="absolute inset-0 h-full w-full"
-        src={`https://www.youtube.com/embed/${youtubeId}`}
+        src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1`}
         title={alt}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
@@ -252,7 +254,9 @@ export default function Wallpaper({
     );
   } else if (videoSrc) {
     expandedMedia = (
-      <video className="absolute inset-0 h-full w-full object-cover" controls autoPlay>
+      // poster: the card's thumbnail shows while loading or if autoplay is blocked.
+      // playsInline: stops iPhones from forcing the video into fullscreen.
+      <video className="absolute inset-0 h-full w-full object-cover" controls autoPlay playsInline poster={src}>
         <source src={videoSrc} />
       </video>
     );
