@@ -15,7 +15,7 @@ export default function CreatorsDivider() {
     <div className={silkscreen.variable} role="presentation">
       {/* plank strip — single tile repeated horizontally */}
       <div
-        className="w-full h-[60px] sm:h-[80px] md:h-[102px]"
+        className="w-full h-[36px] sm:h-[48px] md:h-[60px]"
         style={{
           backgroundImage: "url('/images/about/divider-tile.webp')",
           backgroundRepeat: "repeat-x",
@@ -26,7 +26,7 @@ export default function CreatorsDivider() {
 
       {/* scene banner — "MEET THE CREATORS" lives inside here */}
       <div
-        className="relative w-full h-[120px] sm:h-[160px] md:h-[216px]"
+        className="relative w-full h-[70px] sm:h-[90px] md:h-[120px]"
         style={{
           backgroundImage: "url('/images/about/divider-scenes.webp')",
           backgroundSize: "100% 100%",
@@ -35,7 +35,7 @@ export default function CreatorsDivider() {
       >
         <div className="absolute inset-0 flex items-center justify-center">
           <motion.h2
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-[70px] text-center"
+            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-center"
             style={{
               fontFamily: "var(--font-silkscreen)",
               color: "#F28C00",
