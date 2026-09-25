@@ -83,11 +83,19 @@ export default function MeetTheCreators() {
       aria-label="Meet the creators"
     >
       {/* cards */}
-      <div className="mx-auto max-w-7xl px-6 pt-10 pb-16 sm:px-10">
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {CREATORS.map((creator, i) => (
-            <CreatorCard key={creator.name} {...creator} index={i} />
-          ))}
+      <div className="mx-auto max-w-5xl px-8 pt-16 pb-24 sm:max-w-[640px] sm:px-12 lg:max-w-5xl lg:px-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-6 sm:gap-y-8 lg:gap-y-24 justify-items-center">
+          {CREATORS.map((creator, i) => {
+            const isLastOdd = i === CREATORS.length - 1 && CREATORS.length % 2 !== 0;
+            return (
+              <div
+                key={creator.name}
+                className={`w-full max-w-[280px] ${isLastOdd ? "sm:col-span-2 sm:mx-auto lg:col-span-1 lg:mx-0" : ""}`}
+              >
+                <CreatorCard {...creator} index={i} />
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -96,7 +104,8 @@ export default function MeetTheCreators() {
         className="w-full h-[80px] sm:h-[100px] md:h-[122px]"
         style={{
           backgroundImage: "url('/images/about/divider-footer.webp')",
-          backgroundSize: "100% 100%",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
         }}
         role="presentation"

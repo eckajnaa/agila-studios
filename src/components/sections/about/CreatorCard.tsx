@@ -34,8 +34,8 @@ export default function CreatorCard({
     const rect = cardRef.current.getBoundingClientRect();
     const nx = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);
     const ny = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);
-    rawX.set(nx * 8);
-    rawY.set(ny * 8);
+    rawX.set(nx * 5);
+    rawY.set(ny * 5);
   }
 
   function handleMouseLeave() {
@@ -50,7 +50,7 @@ export default function CreatorCard({
       style={{ padding: "7px 10px" }}
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, amount: 0.2 }}
+      viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.5, ease: "easeOut", delay: (index % 3) * 0.1 }}
       whileHover={{ y: -8, scale: 1.03, zIndex: 10, transition: { duration: 0.2 } }}
       onMouseMove={handleMouseMove}
@@ -82,28 +82,28 @@ export default function CreatorCard({
           height: "100%",
         }}
       >
-        <div className="flex flex-col items-center px-8 pt-5 pb-14">
+        <div className="flex flex-col items-center px-4 pt-3 pb-7">
 
           {/* profile photo */}
-          <div className="relative flex-shrink-0 mt-5" style={{ padding: "3px" }}>
+          <div className="relative flex-shrink-0 mt-4" style={{ padding: "3px" }}>
             <div
               className="relative overflow-hidden"
               style={{
-                width: "clamp(100px, 12vw, 140px)",
-                height: "clamp(100px, 12vw, 140px)",
+                width: "clamp(64px, 8vw, 96px)",
+                height: "clamp(64px, 8vw, 96px)",
                 borderRadius: "15px",
                 background: "linear-gradient(to bottom, #F7AC00, #5A2E0D)",
                 border: "1.5px solid #000",
               }}
             >
-              {/* scale: 1.15 gives room to shift without showing edges */}
-              <motion.div className="absolute inset-0" style={{ x, y, scale: 1.15 }}>
+              {/* scale: 1.05 gives just enough room to shift without showing edges */}
+              <motion.div className="absolute inset-0" style={{ x, y, scale: 1.05 }}>
                 <Image
                   src={image}
-                  alt={name}
+                  alt=""
                   fill
                   className="object-cover object-top"
-                  sizes="(max-width: 640px) 140px, (max-width: 1024px) 12vw, 140px"
+                  sizes="(max-width: 640px) 120px, (max-width: 1024px) 10vw, 120px"
                 />
               </motion.div>
             </div>
@@ -115,17 +115,17 @@ export default function CreatorCard({
           </div>
 
           {/* name */}
-          <p
+          <h3
             className="mt-4 text-center leading-tight"
             style={{
               fontFamily: "var(--font-silkscreen)",
               fontWeight: "700",
               color: "#000",
-              fontSize: "clamp(13px, 1.8vw, 20px)",
+              fontSize: "clamp(11px, 1.2vw, 15px)",
             }}
           >
             {name}
-          </p>
+          </h3>
 
           {/* role badge */}
           <div className="mt-2 mb-2 inline-flex items-center">
@@ -136,7 +136,7 @@ export default function CreatorCard({
                 border: "1px solid #3E1F0A",
                 fontFamily: "var(--font-silkscreen)",
                 color: "#F7AC00",
-                fontSize: "clamp(11px, 1.3vw, 15px)",
+                fontSize: "clamp(9px, 1.1vw, 18px)",
               }}
             >
               {role}
@@ -152,7 +152,7 @@ export default function CreatorCard({
                 style={{
                   fontFamily: "var(--font-about-body)",
                   color: "#3E1F0A",
-                  fontSize: "clamp(11px, 1.2vw, 14px)",
+                  fontSize: "clamp(9px, 1vw, 13px)",
                   fontWeight: "600",
                   backgroundColor: "transparent",
                 }}
