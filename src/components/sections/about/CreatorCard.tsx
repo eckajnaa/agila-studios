@@ -50,7 +50,7 @@ export default function CreatorCard({
       style={{ padding: "7px 10px" }}
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, amount: 0.2 }}
+      viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.5, ease: "easeOut", delay: (index % 3) * 0.1 }}
       whileHover={{ y: -8, scale: 1.03, zIndex: 10, transition: { duration: 0.2 } }}
       onMouseMove={handleMouseMove}
@@ -100,7 +100,7 @@ export default function CreatorCard({
               <motion.div className="absolute inset-0" style={{ x, y, scale: 1.05 }}>
                 <Image
                   src={image}
-                  alt={name}
+                  alt=""
                   fill
                   className="object-cover object-top"
                   sizes="(max-width: 640px) 120px, (max-width: 1024px) 10vw, 120px"
@@ -115,7 +115,7 @@ export default function CreatorCard({
           </div>
 
           {/* name */}
-          <p
+          <h3
             className="mt-4 text-center leading-tight"
             style={{
               fontFamily: "var(--font-silkscreen)",
@@ -125,7 +125,7 @@ export default function CreatorCard({
             }}
           >
             {name}
-          </p>
+          </h3>
 
           {/* role badge */}
           <div className="mt-2 mb-2 inline-flex items-center">
