@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { VT323 } from "next/font/google";
+import { Outfit, VT323 } from "next/font/google";
 import { useState } from "react";
 import { DISCORD_URL, NAV_LINKS } from "@/lib/constants";
 
@@ -11,6 +11,7 @@ const vt323 = VT323({
   subsets: ["latin"],
   display: "swap",
 });
+const outfit = Outfit({ weight: "700", subsets: ["latin"] });
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -52,7 +53,7 @@ export default function Navbar() {
             href={DISCORD_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex translate-y-0 items-center justify-center rounded-[0.4375rem] bg-[#F08100] px-7 py-1 text-xl font-bold text-[#2B1608] shadow-[0_0.375rem_0_0_#BF500D] transition-all duration-150 hover:translate-y-[0.375rem] hover:bg-orange-400 hover:shadow-[0_0_0_0_#BF500D]"
+            className={`inline-flex translate-y-0 items-center justify-center rounded-[0.4375rem] bg-[#F08100] px-5 py-2 text-base font-bold text-[#2B1608] shadow-[0_0.375rem_0_0_#BF500D] transition-all duration-150 hover:translate-y-[0.375rem] hover:bg-orange-400 hover:shadow-[0_0_0_0_#BF500D] ${outfit.className}`}
           >
             Join Discord
           </a>
