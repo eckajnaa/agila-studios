@@ -15,7 +15,7 @@ export const NAV_LINKS: NavLink[] = [
   { label: "FAQ", href: "/#faq" },
 ];
 
-export const DISCORD_URL = "https://discord.gg/agila-studios";
+export const DISCORD_URL = "https://discord.com/invite/KfZCWfyjcc";
 
 export interface SocialLink {
   label: string;
