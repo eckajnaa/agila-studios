@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { Flip } from "gsap/Flip";
 import { VT323 } from "next/font/google";
 import Image from "next/image";
-import { useRef, useState, type ReactNode, type Ref } from "react";
+import { useEffect, useRef, useState, type ReactNode, type Ref } from "react";
 
 const vt323 = VT323({ weight: "400", subsets: ["latin"] });
 
@@ -112,6 +112,7 @@ export default function Wallpaper({
   const backdropRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const flipStateRef = useRef<Flip.FlipState | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   function handleHoverEnter() {
     gsap.to(innerRef.current, {
@@ -146,6 +147,30 @@ export default function Wallpaper({
   function closeModal() {
     setIsOpen(false);
   }
+
+  // Keyboard support while the modal is open: Escape closes it (listening on document so it
+  // works wherever focus is on the page), focus starts on the close button, and goes back to
+  // the card afterwards. A focused YouTube iframe receives keys itself, so Escape can't be
+  // caught while the player has focus — starting focus on the close button avoids that.
+  useEffect(() => {
+    if (!isOpen) return;
+    const card = cardRef.current;
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    closeButtonRef.current?.focus({ preventScroll: true });
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      card?.focus({ preventScroll: true });
+    };
+  }, [isOpen]);
 
   useGSAP(
     () => {
@@ -264,11 +289,15 @@ export default function Wallpaper({
         >
           <div
             ref={frameRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={alt}
             className="relative aspect-[625/430] w-full max-w-4xl"
             onClick={(event) => event.stopPropagation()}
           >
             <FrameArt title={title} media={expandedMedia} />
             <button
+              ref={closeButtonRef}
               type="button"
               onClick={closeModal}
               aria-label="Close"
