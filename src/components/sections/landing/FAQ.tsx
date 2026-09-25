@@ -43,7 +43,7 @@ export default function FAQ() {
                 type="button"
                 onClick={() => setOpenId((prev) => (prev === item.id ? null : item.id))}
                 aria-expanded={isOpen}
-                className="flex w-full items-center justify-between px-5 py-4 text-left"
+                className="flex w-full cursor-pointer items-center justify-between px-5 py-4 text-left"
               >
                 <span className="text-xl font-medium text-[#2a1a0e]" style={{ fontFamily: "var(--font-body)" }}>
                   {item.question}
