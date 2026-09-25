@@ -20,7 +20,9 @@ export default function Hero() {
   useGSAP(() => {
     if (!sectionRef.current || !headingRef.current || !subtitleRef.current) return;
 
-    const split = new SplitText(headingRef.current, { type: "chars" });
+    // Split into words first so each word stays an unbreakable unit — chars alone let the
+    // browser wrap mid-word ("Agila Stud / ios") on narrow screens.
+    const split = new SplitText(headingRef.current, { type: "words,chars" });
 
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
     tl.from(split.chars, { opacity: 0, y: 40, duration: 0.6, stagger: 0.04 })
@@ -66,7 +68,10 @@ export default function Hero() {
       <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center px-4 text-center sm:px-6">
         <h1
           ref={headingRef}
-          className={`text-7xl text-[#FFB300] [text-shadow:3px_3px_0_#000] sm:text-8xl ${silkscreen.className}`}
+          // Fluid size so the heading never overflows: on phones "Studios" (4.75em wide) always
+          // fits its own line; from sm up "Agila Studios" (8.5em) fits on one line. Caps match
+          // the previous text-7xl / sm:text-8xl.
+          className={`text-[length:min(4.5rem,calc((100vw-32px)/5))] text-[#FFB300] [text-shadow:3px_3px_0_#000] sm:text-[length:min(6rem,calc((100vw-48px)/8.8))] ${silkscreen.className}`}
         >
           Agila Studios
         </h1>

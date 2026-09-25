@@ -11,12 +11,20 @@ const silkscreen = Silkscreen({ weight: "400", subsets: ["latin"] });
 gsap.registerPlugin(useGSAP);
 
 export default function CategoryHeading() {
-  const { activeCategory } = usePortfolioCategory();
+  const { activeCategory, restored } = usePortfolioCategory();
   const [displayCategory, setDisplayCategory] = useState(activeCategory);
   const textRef = useRef<HTMLParagraphElement>(null);
+  const hasShownRestored = useRef(false);
 
   useGSAP(
     () => {
+      if (!restored) return;
+      // The category restored from the URL on load appears instantly — no switch animation.
+      if (!hasShownRestored.current) {
+        hasShownRestored.current = true;
+        if (activeCategory !== displayCategory) setDisplayCategory(activeCategory);
+        return;
+      }
       if (activeCategory === displayCategory) return;
 
       gsap
@@ -34,13 +42,13 @@ export default function CategoryHeading() {
           { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" },
         );
     },
-    { dependencies: [activeCategory] },
+    { dependencies: [activeCategory, restored] },
   );
 
   return (
     <p
       ref={textRef}
-      className={`text-4xl text-[#F7AC00] [text-shadow:3px_3px_0_#000] sm:text-5xl ${silkscreen.className}`}
+      className={`${restored ? "" : "invisible"} text-4xl text-[#F7AC00] [text-shadow:3px_3px_0_#000] sm:text-5xl ${silkscreen.className}`}
     >
       {`// ${displayCategory} //`}
     </p>

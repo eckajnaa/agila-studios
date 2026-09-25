@@ -14,14 +14,22 @@ const silkscreen = Silkscreen({ weight: "400", subsets: ["latin"] });
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 export default function CategoryContent() {
-  const { activeCategory } = usePortfolioCategory();
+  const { activeCategory, restored } = usePortfolioCategory();
   const [displayCategory, setDisplayCategory] = useState(activeCategory);
+  const hasShownRestored = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const wipRef = useRef<HTMLParagraphElement>(null);
 
   // Fade the current grid out, then swap in the new category's content.
   useGSAP(
     () => {
+      if (!restored) return;
+      // The category restored from the URL on load appears instantly — no switch animation.
+      if (!hasShownRestored.current) {
+        hasShownRestored.current = true;
+        if (activeCategory !== displayCategory) setDisplayCategory(activeCategory);
+        return;
+      }
       if (activeCategory === displayCategory) return;
 
       const items = containerRef.current
@@ -42,7 +50,7 @@ export default function CategoryContent() {
         onComplete: () => setDisplayCategory(activeCategory),
       });
     },
-    { dependencies: [activeCategory] },
+    { dependencies: [activeCategory, restored] },
   );
 
   // Reveal each wallpaper as it scrolls into view. Items already above the
@@ -50,22 +58,25 @@ export default function CategoryContent() {
   // immediately since they already satisfy the scroll trigger.
   useGSAP(
     () => {
-      if (!containerRef.current) return;
-      const items = gsap.utils.toArray<HTMLElement>(containerRef.current.children);
-      gsap.set(items, { opacity: 0, y: 30 });
+      // Only categories with a grid get the reveal; empty ones (e.g. Development) show WIP.
+      if (containerRef.current) {
+        const items = gsap.utils.toArray<HTMLElement>(containerRef.current.children);
+        gsap.set(items, { opacity: 0, y: 30 });
 
-      ScrollTrigger.batch(items, {
-        start: "top 88%",
-        once: true,
-        onEnter: (batch) =>
-          gsap.to(batch, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.1 }),
-      });
+        ScrollTrigger.batch(items, {
+          start: "top 88%",
+          once: true,
+          onEnter: (batch) =>
+            gsap.to(batch, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.1 }),
+        });
+      }
 
-      // The grid's height changes with each category (e.g. 10 images vs 1),
-      // which shifts where every other trigger on the page (like the
-      // footer's reveal) actually falls. Without this, a trigger whose
-      // point was never reached under a taller category can become
-      // permanently unreachable once the page shrinks.
+      // Always runs, including for empty categories: the content's height changes with each
+      // category (10 images, 1 image, or just the WIP text), which shifts where every other
+      // trigger on the page (like the footer's reveal) falls. Skipping this for the short
+      // WIP layout left the footer's trigger below the new page end, so it never revealed.
+      // This effect runs after the new category's layout is committed, so positions are
+      // measured against the incoming layout, not the outgoing one.
       ScrollTrigger.refresh();
     },
     { dependencies: [displayCategory], revertOnUpdate: true },
@@ -92,7 +103,7 @@ export default function CategoryContent() {
     return (
       <p
         ref={wipRef}
-        className={`px-4 py-24 text-center text-4xl text-[#FFB300] [text-shadow:3px_3px_0_#000] sm:text-5xl ${silkscreen.className}`}
+        className={`${restored ? "" : "invisible"} px-4 py-24 text-center text-4xl text-[#FFB300] [text-shadow:3px_3px_0_#000] sm:text-5xl ${silkscreen.className}`}
       >
         WIP
       </p>
@@ -102,7 +113,7 @@ export default function CategoryContent() {
   return (
     <div
       ref={containerRef}
-      className="mx-auto grid max-w-[76rem] grid-cols-1 gap-10 px-4 pb-16 sm:px-6 md:grid-cols-2"
+      className={`${restored ? "" : "invisible"} mx-auto grid max-w-[76rem] grid-cols-1 gap-10 px-4 pb-16 sm:px-6 md:grid-cols-2`}
     >
       {images.map((item) => (
         <Wallpaper
