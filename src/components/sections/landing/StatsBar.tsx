@@ -1,6 +1,7 @@
 "use client";
 import { motion, useInView, useMotionValue, useSpring, useTransform } from "motion/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { onPreloaderDone } from "@/lib/preloaderStatus";
 
 const STATS = [
   { value: 50, suffix: "+", label: "PROJECTS MADE" },
@@ -14,14 +15,21 @@ function AnimatedNumber({ value, suffix }: { value: number; suffix: string }) {
   const spring = useSpring(motionVal, { duration: 1500, bounce: 0 });
   const display = useTransform(spring, (v) => `${Math.round(v)}${suffix}`);
   const inView = useInView(ref, { once: false });
+  // StatsBar sits high enough on the page that it's already "in view" (by
+  // bounding box) while still hidden behind the fixed-position Preloader, so
+  // gate the count-up on the preloader actually being done too — otherwise
+  // it plays out unseen underneath the overlay.
+  const [preloaderDone, setPreloaderDone] = useState(false);
+
+  useEffect(() => onPreloaderDone(() => setPreloaderDone(true)), []);
 
   useEffect(() => {
-    if (inView) {
+    if (inView && preloaderDone) {
       motionVal.set(0);
       spring.set(0);
       setTimeout(() => motionVal.set(value), 100);
     }
-  }, [inView, value, motionVal, spring]);
+  }, [inView, preloaderDone, value, motionVal, spring]);
 
   return <motion.span ref={ref}>{display}</motion.span>;
 }

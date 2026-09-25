@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Silkscreen } from "next/font/google";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
+import { markPreloaderDone } from "@/lib/preloaderStatus";
 
 const silkscreen = Silkscreen({
   weight: "400",
@@ -65,7 +66,12 @@ export default function Preloader() {
 
   useEffect(() => {
     if (progress < 100) return;
-    const id = window.setTimeout(() => setVisible(false), 350);
+    const id = window.setTimeout(() => {
+      setVisible(false);
+      // Let anything hidden behind the overlay (e.g. StatsBar's count-up)
+      // know it's safe to run its own reveal animation now.
+      markPreloaderDone();
+    }, 350);
     return () => window.clearTimeout(id);
   }, [progress]);
 
