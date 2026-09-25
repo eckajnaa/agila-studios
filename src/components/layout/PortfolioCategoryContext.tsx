@@ -2,8 +2,7 @@
 
 import gsap from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-import { createContext, useContext, useState, type ReactNode } from "react";
-import { useEffect } from "react";
+import { createContext, Suspense, useContext, useEffect, useState, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
 
 gsap.registerPlugin(ScrollToPlugin);
@@ -19,16 +18,24 @@ interface PortfolioCategoryContextValue {
 
 const PortfolioCategoryContext = createContext<PortfolioCategoryContextValue | null>(null);
 
-export function PortfolioCategoryProvider({ children }: { children: ReactNode }) {
-  const [activeCategory, setActiveCategoryState] = useState("Builds");
+// Reads ?category= from the URL. Kept in its own component so only this (it renders
+// nothing) sits behind a Suspense boundary — useSearchParams without one fails the
+// production build, and wrapping the whole provider would skip prerendering the page.
+function CategoryFromSearchParams({ onCategory }: { onCategory: (category: string) => void }) {
   const searchParams = useSearchParams();
 
   useEffect(() => {
     const category = searchParams.get("category");
     if (category) {
-      setActiveCategoryState(category);
+      onCategory(category);
     }
-  }, [searchParams]);
+  }, [searchParams, onCategory]);
+
+  return null;
+}
+
+export function PortfolioCategoryProvider({ children }: { children: ReactNode }) {
+  const [activeCategory, setActiveCategoryState] = useState("Builds");
 
   function setActiveCategory(category: string) {
     setActiveCategoryState(category);
@@ -45,6 +52,9 @@ export function PortfolioCategoryProvider({ children }: { children: ReactNode })
 
   return (
     <PortfolioCategoryContext.Provider value={{ activeCategory, setActiveCategory }}>
+      <Suspense fallback={null}>
+        <CategoryFromSearchParams onCategory={setActiveCategoryState} />
+      </Suspense>
       {children}
     </PortfolioCategoryContext.Provider>
   );
