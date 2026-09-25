@@ -3,6 +3,8 @@
 import gsap from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { createContext, useContext, useState, type ReactNode } from "react";
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 gsap.registerPlugin(ScrollToPlugin);
 
@@ -19,6 +21,14 @@ const PortfolioCategoryContext = createContext<PortfolioCategoryContextValue | n
 
 export function PortfolioCategoryProvider({ children }: { children: ReactNode }) {
   const [activeCategory, setActiveCategoryState] = useState("Builds");
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const category = searchParams.get("category");
+    if (category) {
+      setActiveCategoryState(category);
+    }
+  }, [searchParams]);
 
   function setActiveCategory(category: string) {
     setActiveCategoryState(category);

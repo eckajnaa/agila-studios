@@ -74,8 +74,9 @@ export default function LandingFooter() {
     >
       <div className="mx-auto max-w-7xl px-10 py-12">
 
-        {/* Main grid — logo | sitemap | contact */}
-        <div className="grid grid-cols-1 gap-12 sm:grid-cols-3">
+        {/* Logo | sitemap | contact — space-between leaves equal gaps, so the sitemap sits
+            midway between the logo and the contact column, which ends flush with the divider. */}
+        <div className="flex flex-col gap-12 sm:flex-row sm:justify-between">
 
           <div className="flex flex-col gap-3">
             <Link href="/" aria-label="Agila Studios home">
@@ -146,7 +147,7 @@ export default function LandingFooter() {
         {/* Bottom bar */}
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t-2 border-white/60 pt-6 sm:flex-row">
           <p
-            className="text-ba==lg text-white/70"
+            className="text-base text-white/70"
             style={{ fontFamily: "var(--font-body, 'Outfit', sans-serif)" }}
           >
             © {year} Agila Studios. All rights reserved.

@@ -106,7 +106,7 @@ export default function Hero() {
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
             <Link
               href="/portfolio"
-              className="rounded-lg px-7 py-3 text-xl font-semibold text-[#2B1608] shadow-[0_4px_0px_#BF500D]"
+              className="inline-flex translate-y-0 items-center justify-center rounded-[0.4375rem] bg-[#F08100] px-6 py-2 text-xl font-semibold text-[#2B1608] shadow-[0_0.375rem_0_0_#BF500D] transition-all duration-150 hover:translate-y-[0.375rem] hover:bg-orange-400 hover:shadow-[0_0_0_0_#BF500D]"
               style={{ backgroundColor: "#F08100", fontFamily: "var(--font-body)" }}
             >
               View Portfolio
@@ -115,7 +115,7 @@ export default function Hero() {
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
             <a
               href="#contact"
-              className="rounded-lg border border-white/70 bg-transparent px-7 py-3 text-xl font-semibold text-white shadow-[0_4px_0px_rgba(255,255,255,0.4)]"
+              className="inline-flex translate-y-0 items-center justify-center rounded-[0.4375rem] border border-white/70 bg-transparent px-6 py-2 text-xl font-semibold text-white shadow-[0_4px_0px_rgba(255,255,255,0.4)] transition-all duration-150 hover:translate-y-[4px] hover:shadow-none"
               style={{ fontFamily: "var(--font-body)" }}
             >
               Contact Us
