@@ -58,22 +58,25 @@ export default function CategoryContent() {
   // immediately since they already satisfy the scroll trigger.
   useGSAP(
     () => {
-      if (!containerRef.current) return;
-      const items = gsap.utils.toArray<HTMLElement>(containerRef.current.children);
-      gsap.set(items, { opacity: 0, y: 30 });
+      // Only categories with a grid get the reveal; empty ones (e.g. Development) show WIP.
+      if (containerRef.current) {
+        const items = gsap.utils.toArray<HTMLElement>(containerRef.current.children);
+        gsap.set(items, { opacity: 0, y: 30 });
 
-      ScrollTrigger.batch(items, {
-        start: "top 88%",
-        once: true,
-        onEnter: (batch) =>
-          gsap.to(batch, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.1 }),
-      });
+        ScrollTrigger.batch(items, {
+          start: "top 88%",
+          once: true,
+          onEnter: (batch) =>
+            gsap.to(batch, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.1 }),
+        });
+      }
 
-      // The grid's height changes with each category (e.g. 10 images vs 1),
-      // which shifts where every other trigger on the page (like the
-      // footer's reveal) actually falls. Without this, a trigger whose
-      // point was never reached under a taller category can become
-      // permanently unreachable once the page shrinks.
+      // Always runs, including for empty categories: the content's height changes with each
+      // category (10 images, 1 image, or just the WIP text), which shifts where every other
+      // trigger on the page (like the footer's reveal) falls. Skipping this for the short
+      // WIP layout left the footer's trigger below the new page end, so it never revealed.
+      // This effect runs after the new category's layout is committed, so positions are
+      // measured against the incoming layout, not the outgoing one.
       ScrollTrigger.refresh();
     },
     { dependencies: [displayCategory], revertOnUpdate: true },
