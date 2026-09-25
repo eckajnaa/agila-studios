@@ -11,7 +11,7 @@ type FormStatus = "idle" | "sending" | "success" | "error";
 
 const LABEL_CLASS = "text-xl font-medium text-white";
 const INPUT_CLASS =
-  "rounded border-2 border-transparent bg-[#FFF6E5] px-4 py-2.5 text-lg font-medium text-[#2B1608] placeholder:text-[#2B1608]/55 outline-none transition-colors focus:border-[#F08100] focus:bg-white disabled:opacity-60";
+  "rounded border-2 border-transparent bg-[#FFF6E5] px-4 py-2.5 text-lg font-medium text-[#2B1608] placeholder:text-[#2B1608]/55 outline-none transition-colors focus:border-black focus:bg-white disabled:opacity-60";
 
 export default function Contact() {
   const [status, setStatus] = useState<FormStatus>("idle");
