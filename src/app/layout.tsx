@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Preloader from "@/components/layout/Preloader";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://agila.devs.team"),
@@ -31,7 +32,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <Preloader />
+        {children}
+      </body>
     </html>
   );
 }
