@@ -14,6 +14,7 @@ import Hero from "@/components/sections/landing/Hero";
 import StatsBar from "@/components/sections/landing/StatsBar";
 import Services from "@/components/sections/landing/Services";
 import PortfolioCarousel from "@/components/sections/landing/PortfolioCarousel";
+import Showreel from "@/components/sections/landing/Showreel";
 import HowItWorks from "@/components/sections/landing/HowItWorks";
 import Testimonials from "@/components/sections/landing/Testimonials";
 import WorksSeenOn from "@/components/sections/landing/WorksSeenOn";
@@ -45,6 +46,7 @@ export default function Home() {
         <StatsBar />
         <Services />
         <PortfolioCarousel />
+        <Showreel />
         <HowItWorks />
         <Testimonials />
         <WorksSeenOn />
