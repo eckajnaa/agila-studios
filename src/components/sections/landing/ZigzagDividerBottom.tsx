@@ -7,7 +7,7 @@ export default function ZigzagDividerBottom({
   topColor,
   bottomColor,
 }: ZigzagDividerBottomProps) {
-  const teeth = 6;
+  const teeth = 8;
   const segW = 1200 / teeth;
   const height = 40;
 
