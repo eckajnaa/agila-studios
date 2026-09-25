@@ -88,7 +88,7 @@ export default function Hero() {
           transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
         >
           <p
-            className="text-lg leading-relaxed sm:text-xl md:text-2xl"
+            className="text-base leading-relaxed sm:text-lg md:text-xl"
             style={{
               fontFamily: "var(--font-about-body)",
               color: "#FFF7E8",
@@ -102,7 +102,7 @@ export default function Hero() {
           </p>
 
           <p
-            className="text-lg leading-relaxed sm:text-xl md:text-2xl"
+            className="text-base leading-relaxed sm:text-lg md:text-xl"
             style={{
               fontFamily: "var(--font-about-body)",
               color: "#FFF7E8",
