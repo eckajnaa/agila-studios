@@ -12,7 +12,7 @@ const silkscreen = Silkscreen({
 
 export default function CreatorsDivider() {
   return (
-    <div className={silkscreen.variable} role="presentation">
+    <div className={silkscreen.variable}>
       {/* plank strip — single tile repeated horizontally */}
       <div
         className="w-full h-[36px] sm:h-[48px] md:h-[60px]"
