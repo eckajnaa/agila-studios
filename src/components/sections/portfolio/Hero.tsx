@@ -17,7 +17,7 @@ export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
-
+  
   useGSAP(() => {
     if (!sectionRef.current || !headingRef.current || !subtitleRef.current) return;
 

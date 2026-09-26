@@ -269,7 +269,7 @@ export default function PortfolioCarousel() {
           </div>
           <Link
             href="/portfolio"
-            className="flex translate-y-0 items-center gap-2 rounded border border-orange-400 bg-transparent px-5 py-2.5 text-lg font-semibold text-orange-400 shadow-[0_4px_0px_#fb923c] transition-all duration-150 hover:translate-y-[4px] hover:shadow-none"
+            className="flex translate-y-0 items-center gap-2 rounded border border-orange-400 bg-transparent px-3 py-1.5 text-sm font-semibold text-orange-400 shadow-[0_4px_0px_#fb923c] transition-all duration-150 hover:translate-y-[4px] hover:shadow-none sm:px-5 sm:py-2.5 sm:text-lg"
             style={{ fontFamily: "var(--font-body)" }}
           >
             View All Projects →
