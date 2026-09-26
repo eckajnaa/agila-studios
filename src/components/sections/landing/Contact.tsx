@@ -88,7 +88,7 @@ export default function Contact() {
             href={DISCORD_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex translate-y-0 items-center justify-center rounded-[0.4375rem] bg-[#F08100] px-7 py-2 text-xl font-bold text-[#2B1608] shadow-[0_0.375rem_0_0_#A84400] transition-all duration-150 hover:translate-y-[0.375rem] hover:bg-orange-400 hover:shadow-[0_0_0_0_#BF500D]"
+            className="inline-flex translate-y-0 items-center justify-center rounded-[0.4375rem] bg-[#F08100] px-4 py-1.5 text-base font-bold text-[#2B1608] shadow-[0_0.375rem_0_0_#A84400] transition-all duration-150 hover:translate-y-[0.375rem] hover:bg-orange-400 hover:shadow-[0_0_0_0_#BF500D] sm:px-7 sm:py-2 sm:text-xl"
             style={{ backgroundColor: "#ff8904", fontFamily: "var(--font-body, 'Outfit', sans-serif)" }}
           >
             Join Discord
