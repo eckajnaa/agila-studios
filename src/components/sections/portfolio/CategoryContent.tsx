@@ -120,6 +120,7 @@ export default function CategoryContent() {
           key={item.src}
           src={item.src}
           alt={item.alt}
+          title={item.title}
           youtubeId={item.youtubeId}
           videoSrc={item.videoSrc}
           externalUrl={item.externalUrl}
