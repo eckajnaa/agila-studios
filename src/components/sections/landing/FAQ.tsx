@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from "motion/react";
 
 const FAQ_ITEMS = [
   { id: "faq-1", question: "How many revisions are included?", answer: "Every project includes two rounds of revisions. Additional rounds can be added for a small fee — just ask when you inquire." },
-  { id: "faq-2", question: "What file formats do you deliver?", answer: "We deliver the formats that make sense for your project — world files, schematics, .jar plugins, .mp4 video, source project files, and more." },
   { id: "faq-3", question: "Who owns the finished work?", answer: "You do. Once payment is complete, full ownership of the delivered assets transfers to you." },
   { id: "faq-4", question: "How long does a project take?", answer: "Timelines vary by scope. Small plugins or edits: 1–3 days. Medium builds or animations: 1–2 weeks. Large custom projects: discussed case by case." },
 ];
